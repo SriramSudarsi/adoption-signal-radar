@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adoption Signal Radar</title>
+<meta name="description" content="DAP Market Intelligence Prototype by Sriram Sudarsi (PGP-SM, IIM Lucknow): who needs digital adoption now, why, and how a DAP business could reach them.">
+<meta name="author" content="Sriram Sudarsi">
+<style>
+:root{--bg:#f5f7f9;--panel:#ffffff;--panel-2:#f0f3f6;--ink:#14202e;--muted:#5a6676;--line:#e1e6eb;--accent:#0f766e;--accent-ink:#ffffff;--soft:#e3f2ef;--blue:#2f5fc9;--warn:#9a6700;--warn-bg:#fff6dd;
+ --t1:#0f766e;--t2:#3b6fd8;--t3:#8a97a8;--land:#e8edf2;--land-line:#c5cfd9;
+ --p1:#0f766e;--p2:#3b6fd8;--p3:#7c5cc4;--p4:#c08a1e;--p5:#c2527a;--p6:#8a97a8;
+ --r:12px;--shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.06);
+ --f-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--f-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c131b;--panel:#141e29;--panel-2:#1a2633;--ink:#e5ecf2;--muted:#9babbb;--line:#26354a;--accent:#2cc4b0;--accent-ink:#06201d;--soft:#123430;--blue:#82a6ff;--warn:#f0c560;--warn-bg:#33290f;
+ --t1:#2cc4b0;--t2:#82a6ff;--t3:#6b7a8c;--land:#1a2532;--land-line:#33455b;--p1:#2cc4b0;--p2:#82a6ff;--p3:#b39cf0;--p4:#e2b450;--p5:#ee8fb0;--p6:#7d8b9c;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c131b;--panel:#141e29;--panel-2:#1a2633;--ink:#e5ecf2;--muted:#9babbb;--line:#26354a;--accent:#2cc4b0;--accent-ink:#06201d;--soft:#123430;--blue:#82a6ff;--warn:#f0c560;--warn-bg:#33290f;
+ --t1:#2cc4b0;--t2:#82a6ff;--t3:#6b7a8c;--land:#1a2532;--land-line:#33455b;--p1:#2cc4b0;--p2:#82a6ff;--p3:#b39cf0;--p4:#e2b450;--p5:#ee8fb0;--p6:#7d8b9c;--shadow:none;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);overflow-x:hidden}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+h1,h2,h3,h4{margin:0;line-height:1.25;letter-spacing:-.01em}h1{font-size:26px}h2{font-size:20px}h3{font-size:15px}h4{font-size:14px}
+p{margin:0}.muted{color:var(--muted)}.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}.small{font-size:13px}.tiny{font-size:12px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px}
+.privbar{background:#7a1d1d;color:#fff;text-align:center;font-size:13px;padding:6px 16px;font-weight:600}
+header.top{background:var(--panel);border-bottom:1px solid var(--line)}
+.brandrow{display:flex;align-items:center;gap:14px;padding:14px 0 10px;flex-wrap:wrap}
+.logo{width:40px;height:40px;flex:none}
+.brand{display:flex;flex-direction:column;min-width:0}
+.brand b{font-size:19px;letter-spacing:-.01em}.brand span{font-size:13px;color:var(--muted)}
+.byline{margin-left:auto;text-align:right;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:12px}
+.byline b{color:var(--ink);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;width:34px;height:34px;display:inline-grid;place-items:center;cursor:pointer;flex:none}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs a{padding:10px 12px;border-bottom:2.5px solid transparent;color:var(--muted);font-weight:600;font-size:14px;white-space:nowrap}
+nav.tabs a:hover{color:var(--ink);text-decoration:none}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+main{padding:26px 0 32px}
+.view{display:flex;flex-direction:column;gap:16px}
+.vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.vhead p{color:var(--muted);max-width:760px;margin-top:4px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
+.card>h3{margin-bottom:10px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.span2{grid-column:span 2}.span3{grid-column:span 3}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
+a.chip:hover{text-decoration:none;border-color:var(--accent)}
+.label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--warn-bg);color:var(--warn);white-space:nowrap}
+.label.ok{background:var(--soft);color:var(--accent)}
+.str{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.str.s1,.str.strong{background:color-mix(in srgb,var(--t1) 16%,transparent);color:var(--t1)}
+.str.s2,.str.medium{background:color-mix(in srgb,var(--t2) 16%,transparent);color:var(--t2)}
+.str.s3,.str.weak{background:color-mix(in srgb,var(--t3) 22%,transparent);color:var(--muted)}
+.btn{font:inherit;font-size:14px;font-weight:600;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.6;cursor:wait}.btn.sm{font-size:13px;padding:4px 10px}
+select,input,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+textarea{width:100%;resize:vertical}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.toolbar .grow{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;border:0;background:var(--panel);color:var(--muted);padding:6px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--soft);color:var(--accent);font-weight:700}
+.status{font-size:13px;color:var(--muted)}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.trust{color:var(--muted);font-size:12px}
+.src{font-size:13px}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{background:var(--panel-2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi b{font-size:24px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}.kpi a{font-size:12px;margin-top:auto;padding-top:4px}
+/* bars */
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar{display:grid;grid-template-columns:190px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
+.bar .track{height:10px;background:var(--panel-2);border-radius:99px;overflow:hidden}
+.bar .track i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.bar .v{text-align:right;font-family:var(--f-mono);font-size:12px}
+/* brief */
+.rank{display:flex;flex-direction:column;gap:10px;counter-reset:r}
+.rank li{list-style:none;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.rank li::before{counter-increment:r;content:counter(r);width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--accent);font-weight:700;display:grid;place-items:center;font-size:13px}
+.rank ol,.rank ul{padding:0;margin:0}
+.actions li{list-style:none;padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:3px}
+.actions li:last-child{border-bottom:0}.actions ol{margin:0;padding:0}
+.opp td:first-child{font-weight:600}
+.oppbtn{font:inherit;font-weight:600;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.oppbtn:hover{color:var(--accent)}
+/* board */
+.board{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.mapbox svg{width:100%;height:auto;display:block}
+.pin{cursor:pointer}.pin .halo{opacity:.18}.pin.sel .halo{opacity:.4}.pin.sel .core{stroke:var(--ink);stroke-width:2.5}
+.pin text{font-size:19px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+.pin:focus{outline:none}.pin:focus-visible .core{stroke:var(--ink);stroke-width:3}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.list{display:flex;flex-direction:column;max-height:560px;overflow:auto;margin-top:12px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 6px;cursor:pointer;width:100%}
+.row:hover{background:var(--panel-2)}.row.sel{background:var(--soft)}
+.score{font-family:var(--f-mono);font-weight:700;font-size:16px;text-align:center}
+.row .nm{font-weight:600;display:block}.row .meta{font-size:12px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .side{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-size:12px;color:var(--muted)}
+.tag{font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:1px 6px;border-radius:4px;background:var(--panel-2);border:1px solid var(--line);margin-left:6px;vertical-align:1px;white-space:nowrap}
+.tag.new{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.detail{display:flex;flex-direction:column;gap:14px;position:sticky;top:12px}
+.dhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.big{font-size:34px;font-weight:800;font-family:var(--f-mono);line-height:1}
+.sig{border:1px solid var(--line);border-left:4px solid var(--t2);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.sig.trigger{border-left-color:var(--accent)}
+.sig .top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}.sig .kind{font-weight:700}
+.sub{background:var(--panel-2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.sub ul{margin:0;padding-left:18px}
+.person{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--accent);font-weight:700;font-size:13px;display:grid;place-items:center}
+.why{font-size:13px;color:var(--muted)}
+.breakdown td{padding:5px 0;border:0;font-size:13px}.breakdown td:last-child{text-align:right;font-family:var(--f-mono)}
+.breakdown tr.total td{border-top:1px solid var(--line);font-weight:700;padding-top:7px}
+details summary{cursor:pointer;font-weight:700;font-size:14px}
+/* S/4 */
+.s4top{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:16px}
+.count{background:var(--ink);color:var(--bg);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.count b{font-size:46px;line-height:1;font-family:var(--f-mono)}.count span{font-size:13px;opacity:.85}
+.tl{position:relative;padding-top:24px}
+.tlbar{display:flex;border-radius:8px;overflow:hidden;min-height:58px}
+.seg4{padding:8px 10px;font-size:12px;display:flex;flex-direction:column;justify-content:center;min-width:0;color:#fff}
+.seg4 b{font-size:13px}.seg4.a{background:var(--p1)}.seg4.b{background:var(--p2)}.seg4.c{background:var(--p3)}
+.today{position:absolute;top:0;bottom:0;border-left:2px dashed var(--ink);z-index:1}
+.today span{position:absolute;top:0;left:4px;font-size:11px;font-weight:700;white-space:nowrap}
+.years{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--f-mono)}
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kcol{background:var(--panel-2);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.khead{display:flex;justify-content:space-between;font-size:14px}
+.kwhy{font-size:12px;color:var(--muted)}
+.kcard{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 10px;display:flex;flex-direction:column;gap:3px;font:inherit;font-size:13px;color:inherit;text-align:left;width:100%}
+button.kcard{cursor:pointer}button.kcard:hover{border-color:var(--accent)}
+.kcard .nm{font-weight:700}.kcard .meta{font-size:12px;color:var(--muted)}
+.feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.feed li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.feed li:last-child{border-bottom:0}.feed .d{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:2px}
+.k{font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;margin-right:6px;background:var(--panel-2);border:1px solid var(--line)}
+/* market */
+.pie{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center}
+.pie svg{width:100%;max-width:200px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.range{position:relative;height:10px;background:var(--panel-2);border-radius:99px}
+.range i{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 45%,transparent);border-radius:99px}
+.range b{position:absolute;top:-3px;width:2px;height:16px;background:var(--ink)}
+.share{display:grid;grid-template-columns:170px minmax(0,1fr) 80px;gap:10px;align-items:center;font-size:13px}
+.chart svg{width:100%;height:auto}.chart text{font-size:11px;fill:var(--muted);font-family:var(--f-mono)}.chart text.v{fill:var(--ink);font-weight:700;font-size:12px}
+tr.anchor td{background:var(--soft)}
+/* stakeholders */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.ccard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.ccard .hd{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center}
+.ccard .nm{font-weight:700}.ccard .ti{font-size:13px;color:var(--muted)}
+.ccard .ft{margin-top:auto;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.route{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:3px 0}
+.rt{font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;white-space:nowrap;flex:none}
+.rt.p{background:color-mix(in srgb,var(--p2) 16%,transparent);color:var(--p2)}
+.rt.e{background:color-mix(in srgb,var(--p4) 18%,transparent);color:var(--p4)}
+.rt.a{background:color-mix(in srgb,var(--p1) 16%,transparent);color:var(--p1)}
+.subnav{display:flex;gap:6px;flex-wrap:wrap}
+/* reader */
+.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+.form .full{grid-column:1/-1}
+.found{display:flex;flex-direction:column;gap:8px}
+/* about */
+.prose{display:flex;flex-direction:column;gap:10px;max-width:820px}
+.prose ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.road .step{background:var(--panel-2);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;border-top:4px solid var(--p1)}
+.road .step:nth-child(2){border-top-color:var(--p2)}.road .step:nth-child(3){border-top-color:var(--p3)}
+footer{border-top:1px solid var(--line);background:var(--panel);padding:16px 0;font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:min(560px,calc(100vw - 32px));z-index:9;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}.spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-1px}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+@media (max-width:980px){.board{grid-template-columns:1fr}.detail{position:static}.g4,.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr 1fr}.kanban{grid-template-columns:1fr 1fr}.span3{grid-column:span 2}}
+@media (max-width:640px){h1{font-size:22px}.g2,.g3,.g4{grid-template-columns:1fr}.span2,.span3{grid-column:auto}.kpis{grid-template-columns:1fr 1fr}.kanban{grid-template-columns:1fr}.s4top,.pie{grid-template-columns:1fr}.pie svg{margin:0 auto}
+ .road{grid-template-columns:1fr}.form{grid-template-columns:1fr 1fr}.byline{margin-left:0;text-align:left;width:100%;justify-content:space-between}.bar{grid-template-columns:100px minmax(0,1fr) 36px}.share{grid-template-columns:110px minmax(0,1fr) 62px}
+ .feed li{grid-template-columns:1fr;gap:2px}.list{max-height:none}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="wrap">
+  <div class="brandrow">
+   <svg class="logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="none" stroke="var(--accent)" stroke-width="2.5"/><circle cx="20" cy="20" r="11" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".55"/><circle cx="20" cy="20" r="4" fill="var(--accent)" opacity=".35"/><path d="M20 20 L33 8" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><circle cx="27" cy="25" r="2.6" fill="var(--blue)"/><circle cx="12" cy="13" r="2.2" fill="var(--blue)"/></svg>
+   <div class="brand"><b>Adoption Signal Radar</b><span>DAP Market Intelligence Prototype</span></div>
+   <div class="byline"><span>Prepared by <b>Sriram Sudarsi</b>, PGP-SM, IIM Lucknow</span>
+    <button class="iconbtn" id="themeBtn" type="button" aria-label="Switch light or dark theme" title="Switch theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button></div>
+  </div>
+  <nav class="tabs" aria-label="Sections">
+   <a href="#brief" data-view="brief">Founder's Brief</a>
+   <a href="#board" data-view="board">Opportunity Board</a>
+   <a href="#s4hana" data-view="s4hana">SAP S/4HANA Watch</a>
+   <a href="#market" data-view="market">Market</a>
+   <a href="#stakeholders" data-view="stakeholders">Stakeholders &amp; Network</a>
+   <a href="#reader" data-view="reader">AI reader (beta)</a>
+   <a href="#about" data-view="about">About</a>
+  </nav>
+ </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= FOUNDER'S BRIEF ================= -->
+<section class="view" id="v-brief" aria-labelledby="h-brief">
+ <div class="vhead"><div><h1 id="h-brief">Founder's Brief</h1><p>Where digital-adoption demand is showing up in the US, why now, and what a DAP business could do about it. Data snapshot <span class="asof"></span>.</p></div>
+  <span class="label">Recommendations are illustrative</span></div>
+ <div class="grid g4">
+  <div class="card span2"><h3>Market snapshot <a class="tiny" id="fbiLink" target="_blank" rel="noopener">Fortune Business Insights ↗</a></h3>
+   <div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+    <div class="kpi"><b>$1.59B</b><span>Global DAP market, 2026</span></div>
+    <div class="kpi"><b>$377M</b><span>US market, 2026</span></div>
+    <div class="kpi"><b>$4.37B</b><span>Global forecast, 2034</span></div>
+    <div class="kpi"><b>13.5%</b><span>CAGR, 2026–2034</span></div>
+   </div>
+   <p class="tiny muted" style="margin-top:8px">One mid-range estimate. Other publishers range from $0.67B to $4.8B for 2025; see <a href="#market">Market</a>.</p></div>
+  <div class="card span2"><h3>Top 3 sectors on the board <span class="tiny muted">ranked by total signal score</span></h3><ol class="rank" id="topSectors" style="padding:0;margin:0"></ol></div>
+  <div class="card span4" style="grid-column:1/-1"><h3><span>Top 5 opportunities <span class="tiny muted">by strength, then score</span></span> <a class="tiny" href="#board">Full board →</a></h3>
+   <div class="tblwrap"><table class="opp"><thead><tr><th>Company</th><th>Why now</th><th>Strength</th><th>Latest signal</th><th>Source</th></tr></thead><tbody id="top5"></tbody></table></div></div>
+  <div class="card span2"><h3>Recommended actions <span class="label">Illustrative</span></h3><ol class="actions" id="actions" style="margin:0;padding:0"></ol>
+   <p class="tiny muted" style="margin-top:6px">My reading of public signals. Not validated with any company.</p></div>
+  <div class="card span2"><h3>KPIs to track <span class="tiny muted">current values from the board</span></h3>
+   <div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:12px" id="kpiTiles"></div>
+   <h4 style="margin-bottom:6px">Signals per sector</h4><div class="bars" id="sigSector"></div>
+   <h4 style="margin:12px 0 6px">Opportunities by stage</h4><div class="bars" id="oppStage"></div>
+   <p class="tiny muted" style="margin-top:8px">Stage = how far the research has got for each company. Once signals update automatically, track these weekly.</p></div>
+ </div>
+</section>
+
+<!-- ================= BOARD ================= -->
+<section class="view" id="v-board" aria-labelledby="h-board" hidden>
+ <div class="vhead"><div><h1 id="h-board">Opportunity Board</h1><p>US companies with a public, sourced signal that they need digital adoption help now. Every signal links to its source.</p></div>
+  <div class="toolbar"><button class="btn" type="button" id="btnScan">↻ Refresh signals <span class="label" style="margin-left:2px">Simulated</span></button><button class="btn" type="button" id="btnExport">Export CSV</button></div></div>
+ <div class="card" style="padding:12px">
+  <div class="toolbar">
+   <select id="fSec" aria-label="Sector"><option value="">All sectors</option></select>
+   <select id="fSig" aria-label="Signal type"><option value="">All signal types</option></select>
+   <select id="fStr" aria-label="Signal strength"><option value="">Any strength</option><option value="1">Strong</option><option value="2">Moderate</option><option value="3">Early</option></select>
+   <div class="seg" role="group" aria-label="Signal date"><button type="button" data-range="0" aria-pressed="true">Any date</button><button type="button" data-range="365">12 months</button><button type="button" data-range="183">6 months</button></div>
+   <span class="grow"></span><span class="status" id="scanText">Signals verified and added by hand · last update <span class="asof"></span></span>
+  </div>
+ </div>
+ <div class="board">
+  <div class="card mapbox"><h3><span><span id="bCount"></span> companies · <span id="bSec"></span> sectors</span><span class="tiny muted">HQ locations</span></h3>
+   <svg id="map" viewBox="0 0 960 500" role="img" aria-label="US map of company headquarters, sized by signal score"></svg>
+   <div class="legend"><span><i style="background:var(--t1)"></i>Strong</span><span><i style="background:var(--t2)"></i>Moderate</span><span><i style="background:var(--t3)"></i>Early</span><span>Bigger dot = higher score</span></div>
+   <div class="list" id="list"></div></div>
+  <div class="card detail" id="detail"></div>
+ </div>
+</section>
+
+<!-- ================= S/4HANA ================= -->
+<section class="view" id="v-s4hana" aria-labelledby="h-s4" hidden>
+ <div class="vhead"><div><h1 id="h-s4">SAP S/4HANA Watch</h1><p>SAP ECC mainstream maintenance ends on 31 Dec 2027. Every ECC customer must move, or pay to extend support, and each move changes the daily screens of thousands of people.</p></div></div>
+ <div class="s4top">
+  <div class="count"><span>Days until ECC mainstream maintenance ends</span><b id="s4days">–</b><span>31 Dec 2027 · <a id="s4deadSrc" style="color:inherit;text-decoration:underline" target="_blank" rel="noopener">SAPinsider ↗</a></span></div>
+  <div class="card"><h3>Support timeline</h3><div class="tl" id="s4line"></div><p class="tiny muted" style="margin-top:8px">Extended maintenance costs extra; the transition option to 2033 comes with conditions.</p></div>
+ </div>
+ <div class="kpis" id="s4stats"></div>
+ <div class="card"><h3>Migration tracker <span class="label">Stage is my estimate</span></h3>
+  <p class="small muted" style="margin-bottom:10px">Based on public announcements; stage is my estimate. Each column says what typically helps at that stage (general DAP capabilities).</p>
+  <div class="kanban" id="kanban"></div></div>
+ <div class="grid g2">
+  <div class="card"><h3>What it means for a DAP business <span class="label">My read</span></h3><ul class="small" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px" id="s4imp"></ul></div>
+  <div class="card"><h3>News feed <span class="seg" role="group" aria-label="News filter"><button type="button" data-f="" aria-pressed="true">All</button><button type="button" data-f="company" aria-pressed="false">Companies</button><button type="button" data-f="market" aria-pressed="false">Market</button></span></h3><ul class="feed" id="feed"></ul></div>
+ </div>
+</section>
+
+<!-- ================= MARKET ================= -->
+<section class="view" id="v-market" aria-labelledby="h-mk" hidden>
+ <div class="vhead"><div><h1 id="h-mk">Market</h1><p>Size, growth, which industries spend, and who sells. Every number links to its publisher; estimates differ widely, so the range is shown alongside the anchor.</p></div></div>
+ <div class="kpis">
+  <div class="kpi"><b>$1.59B</b><span>Global DAP market, 2026</span><a class="fbi" target="_blank" rel="noopener">Fortune Business Insights ↗</a></div>
+  <div class="kpi"><b>$377M</b><span>US market, 2026 · North America 34.6%</span><a class="fbi" target="_blank" rel="noopener">Fortune Business Insights ↗</a></div>
+  <div class="kpi"><b>$4.37B</b><span>Global forecast, 2034</span><a class="fbi" target="_blank" rel="noopener">Fortune Business Insights ↗</a></div>
+  <div class="kpi"><b>13.5%</b><span>CAGR, 2026–2034</span><a class="fbi" target="_blank" rel="noopener">Fortune Business Insights ↗</a></div>
+ </div>
+ <div class="grid g2">
+  <div class="card chart"><h3>Growth path <span class="tiny muted">solid = reported, dashed = forecast</span></h3><div id="growth"></div></div>
+  <div class="card"><h3>Share and growth by industry <a class="tiny" id="pieSrc" target="_blank" rel="noopener">Dataintelo ↗</a></h3><div class="pie" id="pie"></div>
+   <p class="tiny muted" style="margin-top:8px">The only public source with a full split; its total market size is about 4× Fortune's, so read shares, not dollars.</p></div>
+ </div>
+ <div class="card"><h3>Industry share across sources</h3><div class="bars" id="shares" style="gap:12px"></div></div>
+ <div class="card"><h3>Market size: how the publishers compare</h3><div class="tblwrap"><table><thead><tr><th>Publisher</th><th class="n">Base</th><th class="n">Forecast</th><th class="n">CAGR</th><th>US / NA</th><th class="n">Updated</th><th>Trust note</th></tr></thead><tbody id="msrc"></tbody></table></div></div>
+ <div class="card"><h3>Market landscape <span class="tiny muted">neutral, sourced, not exhaustive</span></h3>
+  <div class="tblwrap"><table><thead><tr><th>Vendor</th><th>What it does</th><th>Public fact</th><th>Source</th></tr></thead><tbody id="vendors"></tbody></table></div>
+  <p class="small" style="margin-top:10px" id="landNote"></p></div>
+</section>
+
+<!-- ================= STAKEHOLDERS ================= -->
+<section class="view" id="v-stakeholders" aria-labelledby="h-st" hidden>
+ <div class="vhead"><div><h1 id="h-st">Stakeholders &amp; Network</h1><p>Who matters at each company and how a DAP business could reach them. Executives appear only when named in public news or press releases, always with the source.</p></div>
+  <div class="subnav" role="group" aria-label="Jump to"><a class="chip" href="#st-exec">Public executives</a><a class="chip" href="#st-warm">Warm-intro paths</a><a class="chip" href="#st-net">Network</a><a class="chip" href="#st-watch">Watchlist</a></div></div>
+ <div class="card" id="st-exec"><h3>Executives named in public sources <span class="tiny muted" id="execCount"></span></h3>
+  <div class="toolbar" style="margin-bottom:12px"><input id="eq" type="search" placeholder="Search name, title or company" aria-label="Search executives" class="grow"><select id="eSec" aria-label="Sector"><option value="">All sectors</option></select><select id="eStr" aria-label="Relevance"><option value="">Any relevance</option><option value="strong">Strong</option><option value="medium">Medium</option><option value="weak">Weak</option></select></div>
+  <p class="tiny muted" style="margin-bottom:10px">Relevance: <b>strong</b> = spoke publicly about adoption or change; <b>medium</b> = owns the programme; <b>weak</b> = new in role, no public comment yet.</p>
+  <div class="cgrid" id="egrid"></div></div>
+ <div class="card" id="st-warm"><h3>Warm-intro paths <span class="label">Ideas, not existing relationships</span></h3>
+  <p class="small muted" style="margin-bottom:10px">Company → relevant role → possible route. Partner routes come from partners named in the sources; events and alumni routes are possible ways in, not introductions that exist today.</p>
+  <div class="tblwrap"><table><thead><tr><th>Company</th><th>Relevant role</th><th>Possible routes</th></tr></thead><tbody id="warm"></tbody></table></div></div>
+ <div class="card" id="st-net"><h3>My network <span class="tiny muted" id="netNote"></span></h3><div class="cgrid" id="ngrid"></div></div>
+ <div class="card" id="st-watch"><h3>Watchlist <span class="tiny muted">strong company signal, no named stakeholder in a public source yet · not scored</span></h3>
+  <div class="tblwrap"><table><thead><tr><th>Company</th><th>Signal</th><th>Source</th></tr></thead><tbody id="watch"></tbody></table></div></div>
+</section>
+
+<!-- ================= READER ================= -->
+<section class="view" id="v-reader" aria-labelledby="h-rd" hidden>
+ <div class="vhead"><div><h1 id="h-rd">AI reader <span class="label">Beta</span></h1><p>Paste a news article and the reader tags any digital-adoption signals in it, then scores the company. It uses built-in AI when available and falls back to keyword rules. Results stay in this browser session; nothing is saved.</p></div>
+  <span class="status" id="aiMode">Checking for built-in AI…</span></div>
+ <div class="card">
+  <form class="form" id="pform">
+   <label>Company<input id="pCo" required></label>
+   <label>Sector<select id="pSec"></select></label>
+   <label>HQ city<select id="pCity"></select></label>
+   <label>Article date<input id="pDate" type="date" required></label>
+   <label class="full">Article URL<input id="pUrl" type="url" required placeholder="https://"></label>
+   <label class="full">Article text<textarea id="pText" rows="7" required placeholder="Paste a few paragraphs"></textarea></label>
+   <div class="full toolbar"><button class="btn primary" type="submit" id="btnRead">Read article</button><button class="btn" type="button" id="btnDemo">Load a sample article</button><span class="status" id="pStatus"></span></div>
+  </form>
+ </div>
+ <div class="card" id="found" hidden></div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="view" id="v-about" aria-labelledby="h-ab" hidden>
+ <div class="vhead"><div><h1 id="h-ab">About this prototype</h1><p>Adoption Signal Radar: DAP Market Intelligence Prototype, by Sriram Sudarsi (PGP-SM, IIM Lucknow).</p></div></div>
+ <div class="grid g2">
+  <div class="card prose"><h2>Why I built this</h2>
+   <p>I wanted to understand the digital adoption platform (DAP) market: how big it is, which enterprises need adoption help right now, how they decide to buy adoption tools, and how a DAP business could reach the right people.</p>
+   <p>The tool asks four questions a founder's office would ask: where is demand showing up, why now, who matters, and what should we do next? It answers them from public, sourced signals: system migrations (above all SAP ECC to S/4HANA), AI rollouts to employees, mergers, new tech leaders and visible adoption pain.</p>
+   <p class="small muted">An independent student project. Not affiliated with, or endorsed by, any company named here.</p></div>
+  <div class="card prose"><h2>What's real and what's simulated</h2>
+   <div class="tblwrap"><table><tbody id="realsim"></tbody></table></div></div>
+ </div>
+ <div class="card prose" style="max-width:none"><h2>How the score works</h2>
+  <p class="small">Score out of 100 = <b>fit</b> (up to 20: US headquarters, sector with large DAP spend, known size) + <b>triggers</b> (up to 50: migration, AI rollout, merger, new leader) + <b>pain</b> (up to 30: ERP problems, adoption gaps, go-live within six months, hiring and more). Signals older than six months count 0.6×, older than a year 0.3×; indirect evidence is discounted. <b>Strong</b> = 65+, or a trigger plus pain at 50+. <b>Moderate</b> = 40+. Scores are computed as of the data snapshot so they don't drift.</p>
+  <p class="small muted">The weights are my judgment, not fitted to real win/loss data. Validating them is on the roadmap.</p></div>
+ <div class="card prose" style="max-width:none"><h2>How it was built</h2>
+  <ul class="small"><li>AI-assisted research to find candidate articles, then I opened and checked each source before it went in. Anything I couldn't verify went to a watchlist or was dropped.</li>
+   <li>Every signal carries its publisher, date, link and a trust note (primary source, trade press, vendor case study…).</li>
+   <li>One self-contained HTML file: no server, no tracking, no API keys. The AI reader uses the host's built-in AI only if the page runs somewhere that provides it; otherwise keyword rules.</li>
+   <li>People: executives appear only if named in public news or press releases. Personal and alumni connections are shown by role only.</li></ul></div>
+ <div class="card"><h2 style="margin-bottom:12px">Roadmap</h2>
+  <div class="road">
+   <div class="step"><b>Today</b><p class="small">Articles are verified and added by hand. The AI reader analyses pasted articles. Refresh is simulated.</p></div>
+   <div class="step"><b>Next</b><p class="small">AI scans news on a schedule and updates signals automatically, with a person approving new sources.</p></div>
+   <div class="step"><b>Later</b><p class="small">CRM integration, and validation of scores and recommendations with real companies, if it proves useful.</p></div>
+  </div></div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Prepared by <b style="color:var(--ink)">Sriram Sudarsi</b>, PGP-SM, IIM Lucknow</span><span>Independent prototype · data snapshot <span class="asof"></span> · every number links to its source</span></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const PRIVATE=false;
+const DATA={"SIG":{"migration":{"label":"System change / migration","group":"trigger","w":30,"uses":["In-app guidance on the new screens","Practice environments before go-live","Usage analytics after go-live"]},"ai":{"label":"AI rollout to employees","group":"trigger","w":22,"uses":["Guidance inside the AI tools people use","Usage analytics: which teams actually use them"]},"merger":{"label":"Merger / integration","group":"trigger","w":26,"uses":["One guidance layer across the combined systems","Practice environments for the new systems"]},"leader":{"label":"New leader","group":"trigger","w":20,"uses":["Adoption baseline for the new leader's first 100 days"]},"erpIssue":{"label":"ERP/CRM/HCM problems","group":"pain","w":20,"uses":["Step-by-step guidance on error-prone steps","Analytics on where users drop off"]},"struggle":{"label":"Adoption gap / change fatigue","group":"pain","w":18,"uses":["Usage analytics","In-app nudges and self-help"]},"adoptionHire":{"label":"Adoption-related hiring","group":"pain","w":16,"uses":["Guidance authoring to scale the team's work"]},"hiring":{"label":"Hiring push","group":"pain","w":14,"uses":["Onboarding flows for new hires"]},"compliance":{"label":"Regulatory change","group":"pain","w":12,"uses":["In-app process guidance for new rules"]},"pressure":{"label":"Growth / productivity pressure","group":"pain","w":10,"uses":["Licence and usage analytics"]},"complaints":{"label":"Employee tool complaints","group":"pain","w":8,"uses":["In-app self-help"]},"competitor":{"label":"Incumbent DAP in place","group":"pain","w":12,"uses":["Renewal or replacement window"]},"golive":{"label":"Go-live within 6 months","group":"pain","w":20,"uses":["Hypercare guidance at cutover","Cutover rehearsal environments"]}},"SRC":{"usbAws":["Banking Dive","https://www.bankingdive.com/news/us-bank-shifts-critical-apps-aws-ai-push/819964/","trade press with an editorial newsroom"],"usbHire":["U.S. Bancorp IR","https://ir.usbank.com/news-events/news/news-details/2026/U-S--Bank-Expands-Business-Banking-Team-Into-Florida-and-Georgia-Accelerates-Growth-in-Texas-and-Arizona/","company's own announcement, a primary source"],"ab":["American Banker","https://www.americanbanker.com/news/u-s-banks-dilip-venkatachari-is-15-on-the-most-innovative-people-in-finance-ranking","trade press with an editorial newsroom"],"zts":["CIO.com","https://www.cio.com/article/4203540/how-a-new-ai-value-framework-and-stakeholder-focus-keep-zoetis-ahead-of-the-pack.html","interview with the executive in his own words, CIO trade press"],"moo":["Insurance Business","https://www.insurancebusinessmag.com/us/news/benefits/mutual-of-omaha-taps-nationwide-ai-chief-for-top-tech-role-588530.aspx","trade press with an editorial newsroom"],"san":["Santander US","https://www.santanderus.com/news_press_article/santander-expands-u-s-presence-with-completion-of-webster-acquisition/","company's own announcement, a primary source"],"tcb":["Banking Dive","https://www.bankingdive.com/news/texas-capital-mo-jamous-chief-digital-information-officer-us-bank-alum/825146/","trade press with an editorial newsroom"],"arch":["Business Wire","https://www.businesswire.com/news/home/20260520364973/en/","company's own announcement, a primary source"],"msig":["PR Newswire","https://www.prnewswire.com/news-releases/msig-usa-appoints-darin-conselyea-as-chief-human-resources-officer-302777734.html","company's own announcement, a primary source"],"uhg":["Becker's Payer Issues","https://www.beckerspayer.com/workforce/unitedhealth-tracks-ai-use-among-some-staff-report/","healthcare trade press reporting on a third-party report"],"dnow":["Modern Distribution Management","https://www.mdm.com/news/operations/earnings/dnow-raises-outlook-after-2q-beats-expectations-mrc-erp-recovery-advances/","trade press covering the company's earnings call"],"att":["Prosci","https://www.prosci.com/blog/inside-atts-copilot-rollout-ai-adoption","change-management firm's case write-up quoting AT&T's own team"],"voya":["Voya newsroom","https://www.voya.com/news/2026/09/voya-advances-strategic-use-ai-to-enhance-customer-service-operations-and-employee","company's own announcement, a primary source"],"wmb":["Microsoft customer story","https://www.microsoft.com/en/customers/story/27209-williams-microsoft-365-copilot","vendor case study approved by the customer; expect a positive slant"],"hsy":["The CAIO Podcast","https://the-caio-podcast-with-sanjay-pu.cohostpodcasting.com/episodes/inside-hershey-s-ai-strategy-enterprise-transformation-william-hankla-live-at-techx-san-jose","recorded talk, the person's own words"],"hsyErp":["CIO Dive","https://www.ciodive.com/news/hershey-erp-upgrade-sales-inventory-automation-productivity/707285/","trade press covering the company's earnings call"],"mdlz":["The Register","https://www.theregister.com/2026/02/27/mondelez_sap_migration_celonis/","tech press with an editorial newsroom; quotes the company"],"clxDone":["SAPinsider","https://sapinsider.org/clorox-completes-five-year-sap-s-4hana-transformation/","SAP trade press summarising the company's own disclosures"],"clxCut":["ERP Today","https://erp.today/clorox-sap-s4hana-cutover-supply-chain-execution/","ERP trade press; quotes the executive directly"],"sunc":["SNP Group","https://www.snpgroup.com/en/about-snp/news/sun-chemical-selects-snps-kyano-platform-to-lead-global-sap-s4hana-and-rise-with-sap-transformation/","vendor press release quoting the customer's CIO"],"noc":["SNP Group","https://www.snpgroup.com/en/resources/customer-stories/northrop-grumman-and-snp-co-innovating-for-rapid-transformation-with-kyano/","vendor case study, undated; expect a positive slant"],"cndt":["Conduent investor relations","https://conduent.gcs-web.com/news-releases/news-release-details/conduent-names-narayanan-sundaresan-chief-information-and","company's own announcement, a primary source"],"acentra":["Acentra Health","https://acentra.com/news/acentra-health-appoints-michael-kingston-as-chief-digital-information-officer-to-lead-technology-and-ai-innovation","company's own announcement, a primary source"],"dbd":["PR Newswire","https://www.prnewswire.com/news-releases/diebold-nixdorf-names-raj-singh-as-chief-information-officer-302774229.html","company's own announcement, a primary source"],"bd":["BD newsroom","https://news.bd.com/2026-09-21-Arthur-Hu-to-Join-BD-as-Chief-Information-and-Digital-Officer","company's own announcement, a primary source"],"smg":["Built In (job post)","https://builtin.com/job/ai-engineer-sap-s-4-hana-joule/9645630","the company's own job posting, mirrored on a job board"],"wday":["Workday investor relations","https://investor.workday.com/news-and-events/press-releases/news-details/2026/Workday-Signs-a-New-State-or-Local-Government-Nearly-Every-Week-as-Agencies-Move-Off-of-Legacy-Systems/default.aspx","vendor press release naming its customers"],"wct":["Worldwide Clinical Trials careers","https://worldwide.wd1.myworkdayjobs.com/en-US/External/job/Senior-Manager-Digital-Adoption---Enablement_JR102989","the company's own job posting"],"syng":["PR Newswire","https://www.prnewswire.com/news-releases/infosys-successfully-delivers-syngentas-global-sap-s4hana-transformation-for-crop-protection-business-302920656.html","systems integrator's press release, a primary source"],"s4dead":["SAPinsider","https://sapinsider.org/blogs/sap-support-deadlines-2027-2030-2033/","SAP user-community research body; dates match SAP's published notes"],"s4retire":["CIO.com","https://www.cio.com/article/4213227/when-sap-experts-retire.html","interview with a former Fortune Global 500 CIO"],"s4cio":["CIO.com","https://www.cio.com/article/4164632/the-current-hysteria-will-subside.html","interview with an SAP consulting executive; opinion, no survey"],"s4trends":["SAPinsider","https://sapinsider.org/blogs/sap-s4hana-erp-migration-trends-2026/","survey of SAP customers by the SAP user-community research body"],"s4hurdles":["CIO.com","https://www.cio.com/article/4130952/the-7-biggest-hurdles-in-s-4hana-migration-and-how-to-overcome-them.html","practitioner column by an SAP consultancy executive"],"s4gartner":["The Register","https://www.theregister.com/2025/03/20/sap_sees_little_progress_in","tech press reporting Gartner research"],"walkme":["Nasdaq (GlobeNewswire)","https://www.nasdaq.com/press-release/sap-completes-acquisition-walkme-2024-09-12","SAP's own press release, a primary source"],"entrackr":["Entrackr","https://entrackr.com/2024/09/whatfix-raises-125-mn-from-warburg-pincus-and-softbank","tech news site reporting the funding round"],"cxtoday":["CX Today","https://www.cxtoday.com/uncategorized/product-experience-startup-pendo-raises-150mn/","trade press reporting the funding round"],"apty":["Apty","https://apty.ai/","vendor's own description"],"everest":["Everest Group","https://www2.everestgrp.com/reports/EGR-2024-24-R-6686","analyst firm's report page; vendor names behind the paid report"]},"CITIES":{"San Francisco, CA":[37.77,-122.42],"Dallas, TX":[32.78,-96.8],"Houston, TX":[29.76,-95.37],"Tulsa, OK":[36.15,-95.99],"Omaha, NE":[41.26,-95.94],"Minneapolis, MN":[44.98,-93.27],"Minneapolis area, MN":[44.86,-93.45],"North Canton, OH":[40.88,-81.4],"Atlanta, GA":[33.75,-84.39],"Durham, NC":[35.99,-78.9],"McLean, VA":[38.93,-77.18],"Princeton, NJ":[40.35,-74.66],"Newark, NJ":[40.74,-74.17],"Warren, NJ":[40.63,-74.49],"Florham Park, NJ":[40.79,-74.39],"Franklin Lakes, NJ":[41.02,-74.21],"Parsippany, NJ":[40.86,-74.43],"New York, NY":[40.71,-74.01],"Greenwich, CT":[41.03,-73.63],"Windsor, CT":[41.85,-72.64],"Boston, MA":[42.36,-71.06],"Hershey, PA":[40.29,-76.65],"Seattle, WA":[47.61,-122.33],"Los Angeles, CA":[34.05,-118.24],"Chicago, IL":[41.88,-87.63],"Oakland, CA":[37.8,-122.27],"Marysville, OH":[40.24,-83.37],"Falls Church, VA":[38.88,-77.17],"Charlotte, NC":[35.23,-80.84],"Phoenix, AZ":[33.45,-112.07],"Denver, CO":[39.74,-104.99]},"PRIORITY":["Banking","Insurance","Healthcare","Pharma & life sciences","Public sector"],"accounts":[{"id":"usb","name":"U.S. Bank","sector":"Banking","city":"Minneapolis, MN","ownership":"public","ticker":"USB","secName":"US Bancorp","s4":false,"size":"~70,000 people (U.S. Bancorp)","sizeKnown":true,"whyNow":"Moving hundreds of core apps to AWS and deploying AI agents across lines of business","q":"Moving hundreds of core apps to AWS changes the daily screens for a lot of bankers at once. How will you get those teams productive on the new platforms without a spike in support tickets?","signals":[{"type":"migration","date":"2026-05-12","src":"usbAws","ev":"Multiyear program to move hundreds of mission-critical apps to AWS and rebuild payments, wealth and commercial banking platforms."},{"type":"ai","date":"2026-05-12","src":"usbAws","ev":"Plans to build and deploy AI agents across lines of business, including wealth management and commercial banking."},{"type":"hiring","date":"2026-08-31","src":"usbHire","ev":"50+ client-facing business banking roles added in 2026 with more hiring expected. Small push.","scale":0.6}],"contacts":[{"n":"Dilip Venkatachari","t":"EVP, Chief Information & Technology Officer","lvl":"c","s":"strong","why":"Tracks adoption himself: says about 70–75% of engineers were trained and actively using new tools within three months.","date":"2026-06-01","src":"ab"},{"n":"Andy Bingenheimer","t":"CIO, Corporate Functions","lvl":"c","s":"medium","why":"Public voice of the AWS cloud transformation; owns the systems employees will move onto.","date":"2026-05-12","src":"usbAws"}],"warm":[["Partner ecosystem","AWS, the named partner in the cloud migration","usbAws"],["Industry event","Banking technology conferences"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"zts","name":"Zoetis","sector":"Pharma & life sciences","city":"Parsippany, NJ","ownership":"public","ticker":"ZTS","secName":"Zoetis","s4":false,"size":"","sizeKnown":false,"whyNow":"Says early AI work underinvested in change management; now scaling AI use cases","q":"You said colleagues adopt faster when they help shape the change, and that early AI work underinvested in change management. How are you building that into the next wave of AI tools?","signals":[{"type":"struggle","date":"2026-08-19","src":"zts","ev":"Chief Digital & Technology Officer says early AI efforts underinvested in change management; colleagues adopt faster when they help shape the change."},{"type":"ai","date":"2026-08-19","src":"zts","ev":"New AI value framework guiding which AI use cases to scale across the company."}],"contacts":[{"n":"Keith Sarbaugh","t":"EVP & Chief Digital and Technology Officer","lvl":"c","s":"strong","why":"Said in his own words that AI adoption needs change management and employee involvement. That is the core problem a DAP addresses.","date":"2026-08-19","src":"zts"}],"warm":[["Industry event","Enterprise AI and CIO forums"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]},{"id":"moo","name":"Mutual of Omaha","sector":"Insurance","city":"Omaha, NE","ownership":"private","s4":false,"size":"","sizeKnown":false,"whyNow":"New CIO from an AI and digital-transformation role; new mutual holding company structure","q":"With a new CIO who led AI and digital transformation at Nationwide, how will enrollment, billing and claims staff adopt the new workflows as that work reaches them?","signals":[{"type":"leader","role":"CIO (new)","date":"2026-09-03","src":"moo","ev":"Named Chetan Kandhari CIO; he was Chief AI and Digital Transformation Officer at Nationwide."},{"type":"leader","role":"COO with AI-enablement remit","date":"2025-12-01","approx":true,"src":"moo","ev":"COO named late 2025 with business transformation and AI enablement in her remit."},{"type":"pressure","date":"2026-04-01","src":"moo","ev":"Converted into a mutual holding company on 1 April 2026; new structure and capital model."}],"contacts":[{"n":"Stacy Scholtz","t":"Chief Operating Officer","lvl":"c","s":"medium","why":"Her remit includes business transformation and AI enablement, so adoption is an outcome she owns.","date":"2025-12-01","src":"moo"},{"n":"Chetan Kandhari","t":"Chief Information Officer","lvl":"c","s":"weak","why":"New in role (Sep 2026) with an AI-first background. No public adoption comment yet.","date":"2026-09-03","src":"moo"}],"warm":[["Industry event","Insurance technology conferences"],["Alumni network","Mentor view from an IIM alum in US enterprise sales",null,2]]},{"id":"san","name":"Santander US (with Webster)","sector":"Banking","city":"Boston, MA","ownership":"subsidiary","parent":"Banco Santander (Spain)","s4":false,"size":"","sizeKnown":false,"whyNow":"Webster deal closed Aug 2026; two workforces moving onto one set of systems","q":"With Webster now part of Santander Bank, two sets of teams are about to share one set of systems. What's the plan for getting legacy Webster staff fluent on Santander's tools before conversion?","signals":[{"type":"merger","date":"2026-08-20","src":"san","ev":"Webster acquisition completed; most Webster businesses now part of Santander Bank. Integration teams focus on service continuity and employee engagement."},{"type":"leader","role":"CEO & COO from Webster","date":"2026-08-20","src":"san","ev":"Former Webster CEO and COO now lead Santander Bank and Santander US operations."}],"contacts":[{"n":"Luis Massiani","t":"COO, Santander US & Santander Bank","lvl":"c","s":"medium","why":"Runs operations for the combined bank and has posted about the integration, so he owns its people side.","date":"2026-08-20","src":"san"}],"warm":[["Industry event","Banking technology conferences"],["Alumni network","Post-deal integration view from an IIM alum at a US private-equity firm",null,3]]},{"id":"tcb","name":"Texas Capital","sector":"Banking","city":"Dallas, TX","ownership":"public","ticker":"TCBI","secName":"Texas Capital Bancshares","s4":false,"size":"","sizeKnown":false,"whyNow":"New Chief Digital & Information Officer; in-house employee LLM platform to scale","q":"You've already built an in-house multi-LLM platform for employees. With a new Chief Digital & Information Officer driving AI enablement, how are you measuring which teams actually use it day to day?","signals":[{"type":"leader","role":"Chief Digital & Information Officer (new)","date":"2026-07-14","src":"tcb","ev":"Mo Jamous joins to lead technology strategy and AI initiatives; reports to the CEO."},{"type":"ai","date":"2026-07-14","src":"tcb","ev":"Bank has built an in-house multi-LLM platform for employees and plans enterprise-wide agents for work like credit reviews."}],"contacts":[{"n":"Mo Jamous","t":"MD, Chief Digital & Information Officer","lvl":"c","s":"medium","why":"Owns AI enablement and an employee LLM platform that needs measurable usage.","date":"2026-07-14","src":"tcb"}],"warm":[["Industry event","Banking technology conferences"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]},{"id":"arch","name":"Arch Insurance North America","sector":"Insurance","city":"New York, NY","ownership":"subsidiary","parent":"Arch Capital Group (Bermuda)","s4":false,"size":"","sizeKnown":false,"whyNow":"CIO made permanent with a platform-modernisation and responsible-AI brief","q":"Now that the CIO role is permanent and the brief includes platform modernisation and responsible AI adoption, which rollout is first, and how will underwriting and ops teams be brought along?","signals":[{"type":"leader","role":"CIO (made permanent)","date":"2026-05-20","src":"arch","scale":0.5,"ev":"Interim CIO since May 2025 formally appointed; leads IT delivery, platform modernisation and large-scale transformation."},{"type":"migration","date":"2026-05-20","src":"arch","scale":0.5,"ev":"Platform modernisation named in the CIO's remit. No specific system named yet."}],"contacts":[{"n":"Imran Jalozie","t":"Chief Information Officer","lvl":"c","s":"medium","why":"His announced brief links platform modernisation with responsible AI adoption.","date":"2026-05-20","src":"arch"}],"warm":[["Industry event","Insurance technology conferences"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"msig","name":"MSIG USA","sector":"Insurance","city":"Warren, NJ","ownership":"subsidiary","parent":"MS&AD (Japan)","s4":false,"size":"","sizeKnown":false,"whyNow":"New CHRO with an HR-technology background","q":"With a new CHRO who led HR technology at Guardian, is onboarding onto new tools part of the first-year plan?","signals":[{"type":"leader","role":"CHRO (new)","date":"2026-05-20","src":"msig","ev":"Darin Conselyea named CHRO; previously led HR operations and HR technology at Guardian Life."}],"contacts":[{"n":"Darin Conselyea","t":"Chief Human Resources Officer","lvl":"c","s":"weak","why":"New CHRO with an HR-technology background. No public adoption comment yet.","date":"2026-05-20","src":"msig"}],"warm":[["Industry event","Insurance technology conferences"],["Alumni network","Mentor view from an IIM alum in US enterprise sales",null,2]]},{"id":"uhg","name":"UnitedHealth Group (Optum)","sector":"Healthcare","city":"Minneapolis area, MN","ownership":"public","ticker":"UNH","secName":"UnitedHealth Group","s4":false,"size":"","sizeKnown":false,"whyNow":"Tracks staff AI use; a dashboard flags adoption gaps","q":"Optum is already tracking where AI adoption lags. Once a dashboard shows the gap, what helps those teams close it inside their daily tools?","signals":[{"type":"struggle","date":"2026-05-18","src":"uhg","ev":"Tracks some Optum staff's daily AI use; a dashboard flags adoption gaps."},{"type":"ai","date":"2026-05-18","src":"uhg","ev":"Large AI programme (about $1.5B spend reported) across services and claims."}],"contacts":[{"n":"Sandeep Dadlani","t":"CEO, Optum Insight","lvl":"c","s":"medium","why":"Positions Optum Insight as AI-first; the reported adoption gaps sit in his business.","date":"2026-05-18","src":"uhg"}],"warm":[["Industry event","Health IT conferences (e.g. HIMSS)"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]},{"id":"dnow","name":"DNOW","sector":"Industrial","city":"Houston, TX","ownership":"public","ticker":"DNOW","secName":"DNOW Inc","s4":false,"size":"","sizeKnown":false,"whyNow":"Oracle ERP stabilisation after the MRC Global deal; ~$8.5M cost in Q2","q":"After the MRC Global deal, the Oracle ERP needed real stabilisation work. As you move from fixing to optimising, how are warehouse and billing teams getting up to speed on the right steps?","signals":[{"type":"erpIssue","date":"2026-08-06","approx":true,"src":"dnow","ev":"MRC Global's US Oracle ERP needed stabilisation: delayed invoicing and warehouse picking issues; about $8.5M ERP stabilisation cost in Q2."},{"type":"merger","date":"2025-11-15","approx":true,"src":"dnow","ev":"Acquired MRC Global in November 2025 and is integrating its systems."}],"contacts":[{"n":"David Cherechinsky","t":"President & CEO","lvl":"c","s":"medium","why":"Reported the ERP recovery and its cost to investors, so the pain is visible at CEO level.","date":"2026-08-06","src":"dnow"}],"warm":[["Partner ecosystem","Oracle ERP partners (the system being stabilised)","dnow"],["Alumni network","Post-deal integration view from an IIM alum at a US private-equity firm",null,3]]},{"id":"att","name":"AT&T","sector":"Telecom","city":"Dallas, TX","ownership":"public","ticker":"T","secName":"AT&T","s4":false,"size":"60,000 Copilot licences planned","sizeKnown":true,"whyNow":"Copilot licences going from 20,000 to 60,000; reports change fatigue and hard-to-measure ROI","q":"Scaling Copilot from 20,000 to 60,000 licences is a big jump. With change fatigue already in the picture, how are you proving ROI team by team?","signals":[{"type":"ai","date":"2026-08-07","src":"att","ev":"Microsoft 365 Copilot reached 18,000+ active users in six weeks; licences expanding from 20,000 to 60,000."},{"type":"struggle","date":"2026-08-07","src":"att","ev":"Reported challenges: change fatigue, governance requirements and difficulty measuring ROI."}],"contacts":[{"n":"Stephanie Harvey","t":"Principal Technology Strategist","lvl":"other","s":"strong","why":"Ran the Copilot rollout and spoke publicly about change fatigue and ROI. A practitioner voice, not the budget owner.","date":"2026-08-07","src":"att"}],"warm":[["Partner ecosystem","Microsoft 365 Copilot ecosystem; Prosci, the change-management firm that wrote up the rollout","att"],["Industry event","Enterprise AI and CIO forums"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]},{"id":"voya","name":"Voya Financial","sector":"Insurance","city":"Windsor, CT","ownership":"public","ticker":"VOYA","secName":"Voya Financial","s4":false,"size":"","sizeKnown":false,"whyNow":"98% of employees use AI assistants; the next question is depth of use","q":"98% of your people use Copilot. The next question is usually depth: are they using it in the workflows that matter? How do you see that today?","signals":[{"type":"ai","date":"2026-09-16","src":"voya","scale":0.6,"ev":"98% of employees use AI assistants like Copilot; near-universal AI literacy certification. Already strong, lower urgency."}],"contacts":[{"n":"Rajat Kalia","t":"CTO, Workplace Technology","lvl":"c","s":"medium","why":"Quoted on workforce AI readiness; owns workplace AI tools and the literacy programme.","date":"2026-09-16","src":"voya"}],"warm":[["Partner ecosystem","Microsoft Copilot ecosystem (named in the release)","voya"],["Industry event","Insurance technology conferences"]]},{"id":"wmb","name":"Williams","sector":"Energy","city":"Tulsa, OK","ownership":"public","ticker":"WMB","secName":"Williams Companies","s4":false,"size":"6,000+ frontline users","sizeKnown":true,"whyNow":"Copilot for 6,000+ frontline staff; adoption rose above 90%","q":"Frontline teams building their own Copilot agents is impressive. As the number of agents grows, how do people find the right one in the moment?","signals":[{"type":"ai","date":"2026-09-09","src":"wmb","scale":0.6,"ev":"Copilot to 6,000+ frontline employees; AI adoption rose from single digits to over 90%. Already strong, lower urgency."}],"contacts":[{"n":"Naveen Pandrangi","t":"VP & Chief Transformation and Information Officer","lvl":"vp","s":"medium","why":"Led the frontline Copilot rollout; agent sprawl is the next problem.","date":"2026-09-09","src":"wmb"}],"warm":[["Partner ecosystem","Microsoft, which published the Copilot customer story","wmb"],["Industry event","Enterprise AI and CIO forums"]]},{"id":"hsy","name":"The Hershey Company","sector":"Consumer goods","city":"Hershey, PA","ownership":"public","ticker":"HSY","secName":"Hershey Co","s4":true,"size":"","sizeKnown":false,"whyNow":"AI and modernisation agenda; an earlier S/4HANA upgrade hit sales","q":"You talked about AI and modernisation across Hershey's operations. As those tools reach plants and offices, how are you helping people pick up the new ways of working?","signals":[{"type":"ai","date":"2026-05-26","src":"hsy","scale":0.5,"ev":"VP of Transformation spoke about Hershey's AI strategy and enterprise transformation (TechX San Jose)."},{"type":"migration","date":"2026-05-26","src":"hsy","scale":0.5,"ev":"Business modernisation programme discussed. No specific system named."},{"type":"erpIssue","date":"2024-02-12","src":"hsyErp","ev":"Phased SAP S/4HANA upgrade caused operational headwinds in late 2023 and limited automation savings in early 2024."}],"contacts":[{"n":"Will Hankla","t":"VP of Transformation","lvl":"vp","s":"medium","why":"Spoke publicly on AI adoption and enterprise modernisation; transformation is his job title.","date":"2026-05-26","src":"hsy"}],"warm":[["Partner ecosystem","SAP ecosystem (S/4HANA upgrade)","hsyErp"],["Industry event","SAP user-group events (e.g. ASUG, SAP Sapphire)"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"mdlz","name":"Mondelēz International","sector":"Consumer goods","city":"Chicago, IL","ownership":"public","ticker":"MDLZ","secName":"Mondelez International","s4":true,"size":"","sizeKnown":false,"whyNow":"Moving ECC to S/4HANA; North America go-live in H2 2026","q":"North America goes live on S/4HANA in the second half of this year. When thousands of people switch screens at cutover, how will you keep order-to-cash running and support tickets down?","signals":[{"type":"migration","date":"2026-02-27","src":"mdlz","ev":"Moving its ERP estate from SAP ECC to S/4HANA across source-to-pay, order-to-cash, record-to-report and hire-to-retire."},{"type":"golive","date":"2026-02-27","src":"mdlz","ev":"North America and Latin America scheduled to go live in the second half of 2026; other regions starting."}],"contacts":[{"n":"Rossana Rizzotto","t":"Head of the CIDO Office","lvl":"vp","s":"medium","why":"Speaks for the ECC-to-S/4HANA programme and the process work behind it.","date":"2026-02-27","src":"mdlz"}],"warm":[["Partner ecosystem","Celonis, named in the S/4HANA migration story","mdlz"],["Industry event","SAP user-group events (e.g. ASUG, SAP Sapphire)"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"clx","name":"Clorox","sector":"Consumer goods","city":"Oakland, CA","ownership":"public","ticker":"CLX","secName":"Clorox","s4":true,"size":"5,000+ employees trained for go-live","sizeKnown":true,"whyNow":"Live on S/4HANA since Jan 2026; the cutover slowed Q1 sales","q":"You went live on S/4HANA in January and said the people side was about the frontline end users. Now that you're in stabilisation, how do you see where people still fall back on workarounds?","signals":[{"type":"migration","date":"2026-02-13","src":"clxDone","ev":"Completed a five-year move from a 20-year-old SAP system to cloud S/4HANA across 21 US and Canadian plants in January 2026."},{"type":"erpIssue","date":"2026-04-09","src":"clxCut","ev":"Cutover disrupted supply chain performance and slowed Q1 sales; productivity gains not expected until fiscal 2027."}],"contacts":[{"n":"Pascal Montilus","t":"Chief Supply Chain Officer","lvl":"c","s":"strong","why":"Said in his own words that the people side focused on frontline end users. Adoption after go-live is his problem now.","date":"2026-04-09","src":"clxCut"}],"warm":[["Partner ecosystem","SAP ecosystem (cloud S/4HANA)","clxDone"],["Industry event","SAP user-group events (e.g. ASUG, SAP Sapphire)"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"sunc","name":"Sun Chemical","sector":"Industrial","city":"Parsippany, NJ","ownership":"subsidiary","parent":"DIC Corporation (Japan)","s4":true,"size":"","sizeKnown":false,"whyNow":"Consolidating SAP into one S/4HANA environment across 60+ countries","q":"Folding your SAP landscape into one S/4HANA environment across 60+ countries means many teams learning one way of working. How are you planning to bring users along before each wave?","signals":[{"type":"migration","date":"2026-02-17","src":"sunc","ev":"Consolidating its SAP landscape into a single S/4HANA environment while moving to RISE with SAP; operates in 60+ countries."}],"contacts":[{"n":"Chimdi Ifeakanwa","t":"Corporate VP & Chief Information Officer","lvl":"c","s":"medium","why":"Owns the S/4HANA and RISE programme and is quoted on it.","date":"2026-02-17","src":"sunc"}],"warm":[["Partner ecosystem","SNP Group (Kyano) and RISE with SAP, named in the release","sunc"],["Industry event","SAP user-group events (e.g. ASUG, SAP Sapphire)"],["Alumni network","Advice from an IIM alum leading partnerships at a global systems integrator",null,1]]},{"id":"noc","name":"Northrop Grumman","sector":"Industrial","city":"Falls Church, VA","ownership":"public","ticker":"NOC","secName":"Northrop Grumman","s4":true,"size":"70,000 S/4HANA users","sizeKnown":true,"whyNow":"70,000 S/4HANA users live; more ECC phases planned","q":"With 70,000 people already on S/4HANA and more ECC phases to come, how do you get each new wave productive without repeating classroom training?","signals":[{"type":"migration","date":"2024-01-15","approx":true,"src":"noc","ev":"First S/4HANA go-live covered 70,000 users (Jan 2024); further ECC and non-SAP conversions to S/4HANA are planned."}],"contacts":[{"n":"Will Setiyawan","t":"Global ERP Lead","lvl":"vp","s":"medium","why":"Leads the phased ERP programme; named in the migration case study.","date":"2024-01-15","src":"noc"}],"warm":[["Partner ecosystem","SNP Group, named in the migration case study","noc"],["Industry event","SAP user-group events (e.g. ASUG, SAP Sapphire)"]]},{"id":"cndt","name":"Conduent","sector":"Business services","city":"Florham Park, NJ","ownership":"public","ticker":"CNDT","secName":"Conduent","s4":false,"size":"","sizeKnown":false,"whyNow":"New CITO with a company-wide AI mandate","q":"Your new CITO talks about AI across the enterprise, associate experience and user trust. Which teams feel that change first?","signals":[{"type":"leader","role":"CITO (new)","date":"2026-09-14","src":"cndt","ev":"Narayanan Sundaresan named Chief Information and Technology Officer."},{"type":"ai","date":"2026-09-14","src":"cndt","scale":0.5,"ev":"Priorities: speed up AI-driven capabilities company-wide and modernise operations."}],"contacts":[{"n":"Narayanan Sundaresan","t":"Chief Information & Technology Officer","lvl":"c","s":"medium","why":"Has posted about AI across the enterprise and associate experience; AI mandate confirmed in the press release.","date":"2026-09-14","src":"cndt"}],"warm":[["Industry event","Enterprise AI and CIO forums"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]},{"id":"acentra","name":"Acentra Health","sector":"Healthcare","city":"McLean, VA","ownership":"private","s4":false,"size":"","sizeKnown":false,"whyNow":"New CDIO to modernise platforms and add AI","q":"Modernising platforms while adding AI in health services touches a lot of staff workflows. How are you planning the people side of that?","signals":[{"type":"leader","role":"CDIO (new)","date":"2026-07-13","src":"acentra","ev":"Michael Kingston appointed Chief Digital & Information Officer to lead technology and AI."},{"type":"migration","date":"2026-07-13","src":"acentra","scale":0.5,"ev":"Priorities include modernising technology platforms. No system named."}],"contacts":[{"n":"Michael Kingston","t":"Chief Digital & Information Officer","lvl":"c","s":"weak","why":"New (Jul 2026) with platform-modernisation and AI priorities. No public adoption comment yet.","date":"2026-07-13","src":"acentra"}],"warm":[["Industry event","Health IT conferences (e.g. HIMSS)"],["Alumni network","Mentor view from an IIM alum in US enterprise sales",null,2]]},{"id":"dbd","name":"Diebold Nixdorf","sector":"Industrial","city":"North Canton, OH","ownership":"public","ticker":"DBD","secName":"Diebold Nixdorf","s4":false,"size":"","sizeKnown":false,"whyNow":"New EVP & CIO focused on platform modernisation","q":"A new CIO focused on modernising platforms and efficiency usually means new tools for a global workforce. How will you get them productive quickly?","signals":[{"type":"leader","role":"EVP & CIO (new)","date":"2026-05-18","src":"dbd","ev":"Raj Singh named EVP and CIO, succeeding a retiring CIO."},{"type":"migration","date":"2026-05-18","src":"dbd","scale":0.5,"ev":"Priorities: modernise platforms and improve operational efficiency."}],"contacts":[{"n":"Raj Singh","t":"EVP & Chief Information Officer","lvl":"c","s":"weak","why":"New (May 2026) with platform-modernisation and efficiency priorities. No public adoption comment yet.","date":"2026-05-18","src":"dbd"}],"warm":[["Industry event","CIO networking forums"],["Alumni network","Mentor view from an IIM alum in US enterprise sales",null,2]]},{"id":"bd","name":"BD (Becton Dickinson)","sector":"Healthcare","city":"Franklin Lakes, NJ","ownership":"public","ticker":"BDX","secName":"Becton Dickinson","s4":false,"size":"","sizeKnown":false,"whyNow":"New CIDO whose brief is to embed AI into daily work","q":"Embedding AI into daily work is in the new CIDO's brief from day one. What would good adoption look like at 90 days?","signals":[{"type":"leader","role":"EVP, CIDO (new)","date":"2026-09-21","src":"bd","ev":"Arthur Hu joins as Chief Information and Digital Officer from Lenovo, starting 30 Sep 2026."},{"type":"ai","date":"2026-09-21","src":"bd","scale":0.5,"ev":"Priorities: modernise the enterprise and embed AI into daily work."}],"contacts":[{"n":"Arthur Hu","t":"EVP, Chief Information & Digital Officer","lvl":"c","s":"medium","why":"Stated priority is embedding AI into daily work, which is an adoption goal.","date":"2026-09-21","src":"bd"}],"warm":[["Industry event","Health IT conferences (e.g. HIMSS)"],["Alumni network","Advice from an IIM alum running a US digital-transformation firm",null,0]]}],"NOCONTACT":[{"co":"Scotts Miracle-Gro","what":"Job post: \"We are migrating to SAP S/4HANA and have a live sandbox ready today\"","date":"2026-08-01","src":"smg"},{"co":"Commonwealth of Massachusetts","what":"New Workday customer, moving off legacy systems","date":"2026-09-02","src":"wday"},{"co":"State of Georgia","what":"Went live on Workday for HR, finance and grants","date":"2026-09-02","src":"wday"},{"co":"NJ Transit","what":"New Workday customer, moving off legacy systems","date":"2026-09-02","src":"wday"},{"co":"Worldwide Clinical Trials","what":"Hiring a Senior Manager, Digital Adoption & Enablement (Workday, Medidata, Copilot)","date":"2026-11-05","src":"wct"}],"S4_DEADLINE":"2027-12-31","S4_STAGES":[["plan","Planning","Skills baseline; adoption plan written into the programme"],["mig","Migrating","Practice environments so people rehearse future workflows before cutover"],["golive","Go-live window","In-app guidance live on day one to keep orders moving and tickets down"],["live","Live · stabilising","Usage analytics to find workarounds; in-app guidance to fix them"]],"S4_TRACK":[{"co":"Sun Chemical","acc":"sunc","stage":"plan","city":"Parsippany, NJ","note":"One S/4HANA environment on RISE with SAP, 60+ countries","date":"2026-02-17","src":"sunc"},{"co":"Scotts Miracle-Gro","acc":null,"stage":"mig","city":"Marysville, OH","note":"\"Migrating to SAP S/4HANA\"; sandbox live, production not yet","date":"2026-08-01","approx":true,"src":"smg"},{"co":"Northrop Grumman","acc":"noc","stage":"mig","city":"Falls Church, VA","note":"70,000 users live since Jan 2024; more ECC phases to come","date":"2024-01-15","approx":true,"src":"noc"},{"co":"Mondelēz International","acc":"mdlz","stage":"golive","city":"Chicago, IL","note":"ECC to S/4HANA; North America goes live H2 2026","date":"2026-02-27","src":"mdlz"},{"co":"Clorox","acc":"clx","stage":"live","city":"Oakland, CA","note":"Live Jan 2026 after five years; Q1 sales slowed, gains expected FY2027","date":"2026-04-09","src":"clxCut"},{"co":"The Hershey Company","acc":"hsy","stage":"live","city":"Hershey, PA","note":"Phased S/4HANA upgrade hit sales in late 2023; a cautionary tale","date":"2024-02-12","src":"hsyErp"}],"S4_NEWS":[["2026-10-27","market","Infosys delivers Syngenta's global S/4HANA rollout to 10,000+ employees in 80 countries","syng"],["2026-09-28","market","SAP support dates confirmed: mainstream ends 2027, extended to 2030, transition option to 2033 with conditions","s4dead"],["2026-08-25","market","Retiring SAP experts take process knowledge with them mid-migration","s4retire"],["2026-08-01","company","Scotts Miracle-Gro job post: \"We are migrating to SAP S/4HANA\" (reposted ~Aug 2026)","smg"],["2026-04-29","market","\"2027 deadline out of reach for most customers\"; 2030 more realistic","s4cio"],["2026-04-09","company","Clorox cutover: CSCO says the people side focused on frontline end users","clxCut"],["2026-04-02","market","SAPinsider survey: 55% deploying S/4HANA, only 34% fully transitioned","s4trends"],["2026-02-27","company","Mondelēz moving ECC to S/4HANA; North America and LatAm go live H2 2026","mdlz"],["2026-02-17","company","Sun Chemical consolidates its SAP landscape into one S/4HANA environment","sunc"],["2026-02-16","market","Seven biggest S/4HANA hurdles: change management must involve every employee","s4hurdles"],["2026-02-13","company","Clorox completes five-year S/4HANA move across 21 plants; 38,000 training hours","clxDone"],["2025-03-20","market","Gartner: about 39% of ~35,000 ECC customers had licensed S/4HANA by end-2024","s4gartner"],["2024-09-12","market","SAP completes its US$1.5B acquisition of WalkMe","walkme"],["2024-02-12","company","Hershey's phased S/4HANA upgrade weighs on sales and automation savings","hsyErp"]],"NETWORK":[{"g":"IIM Lucknow alumni","role":"Co-founder & CEO","org":"US-headquartered digital-transformation firm","why":"Can explain how US enterprises judge transformation and adoption spend, and whether clients hit adoption gaps after big programmes."},{"g":"IIML North America chapter","role":"Global head of GTM & partnerships","org":"Global IT services firm / systems integrator","why":"Systems integrators run SAP and Workday rollouts; a view of how partners bring adoption tools into those programmes."},{"g":"IIML North America chapter","role":"BPO sales leader","org":"Global technology company","why":"Experienced US enterprise seller; a mentor view on how US CIOs buy."},{"g":"IIML North America chapter","role":"Partner","org":"US private-equity firm","why":"Portfolio companies often upgrade ERP after an acquisition; a view on post-deal integration buyers."},{"g":"IIML North America chapter","role":"Co-founder & CEO","org":"US technology firm","why":"Founder view on how mid-market companies buy technology."},{"g":"PGP-SM peer, IIM Lucknow","role":"Founder","org":"Sustainability start-up","why":"Sustainability reporting runs on new data tools, so ESG teams face adoption problems too; a peer to compare notes with."}],"MSRC":[{"p":"Fortune Business Insights","base":"$1.24B (2025) · $1.59B (2026)","fc":"$4.37B (2034)","cagr":"13.5% (2026–34)","us":"US $377M (2026) · NA 34.6%","up":"Oct 2026","url":"https://www.fortunebusinessinsights.com/digital-adoption-platform-market-107609","anchor":true,"trust":"Established publisher; headline figures shown openly on the summary page; mid-range estimate"},{"p":"Research and Markets","base":"$792M (2024)","fc":"$2.6B (2030)","cagr":"21.5% (2024–30)","us":"US $216M (2024)","up":"Sep 2026","url":"https://www.researchandmarkets.com/reports/6088981/digital-adoption-platforms-market-global","trust":"Distributor of a third-party report (Market Glass), not the original author"},{"p":"Market Research Future","base":"$2.47B (2024) · $3.02B (2025)","fc":"$22.1B (2035)","cagr":"22.1% (2025–35)","us":"NA ~45%","up":"Sep 2026","url":"https://www.marketresearchfuture.com/reports/digital-adoption-platform-market-31704","trust":"Size shown openly; sector shares behind the paid report; high-end estimate"},{"p":"Market.us","base":"$670M (2025)","fc":"$17.3B (2035)","cagr":"38.4% on page, 18.4% in summary","us":"US $217M · NA 38.1%","up":"Mar 2026","url":"https://market.us/report/digital-adoption-platform-market/","trust":"Inconsistent CAGR on the same page; use with caution"},{"p":"6Wresearch","base":"$1.9B (2025)","fc":"$6.4B (2032)","cagr":"8.2% (2026–32)","us":"—","up":"Sep 2026","url":"https://www.6wresearch.com/industry-report/global-digital-adoption-platform-market","trust":"Smaller publisher; BFSI share given as approximate"},{"p":"Dataintelo","base":"$4.8B (2025)","fc":"to 2034","cagr":"—","us":"—","up":"2026","url":"https://dataintelo.com/report/global-digital-adoption-platforms-market","trust":"Only source with a full public sector split, but its market size is about 4× Fortune's; low confidence"}],"SHARES":[{"ind":"BFSI","vals":[["Fortune BI",22.53],["Dataintelo",24.6],["Market.us",35.5],["6Wresearch",40]],"note":"4 sources"},{"ind":"Healthcare & life sciences","vals":[["Dataintelo",18.3]],"note":"1 source · Fortune BI says it will lead the forecast"},{"ind":"IT & telecom","vals":[["Dataintelo",16.7]],"note":"1 source"},{"ind":"Retail & e-commerce","vals":[["Dataintelo",13.2]],"note":"1 source · fastest-growing per 6Wresearch and MRFR"},{"ind":"Education","vals":[["Dataintelo",9.4]],"note":"1 source · fastest-growing per Dataintelo"},{"ind":"Others","vals":[["Dataintelo",17.8]],"note":"1 source"},{"ind":"Manufacturing","vals":[],"note":"not shown publicly"},{"ind":"Government & public sector","vals":[],"note":"not shown publicly · fastest-growing in NA per Fortune BI"}],"VENDORS":[{"n":"WalkMe (SAP)","what":"Digital adoption platform, now owned by SAP","fact":"SAP completed its US$1.5B acquisition in Sep 2024","src":"walkme"},{"n":"Whatfix","what":"Digital adoption platform (in-app guidance and performance support)","fact":"Raised a US$125M Series E led by Warburg Pincus in Sep 2024, at a valuation of nearly US$900M","src":"entrackr"},{"n":"Pendo","what":"Product experience and adoption platform (in-app guides, analytics, feedback)","fact":"Raised a US$150M Series F in Jul 2021","src":"cxtoday"},{"n":"Apty","what":"Enterprise digital adoption with a process-compliance focus (Salesforce, Workday, ServiceNow, Oracle)","fact":"Positioning from the vendor's own site","src":"apty"}],"DEMO":{"co":"Wells Fargo","city":"San Francisco, CA","sec":"Banking","date":"2026-07-15","url":"https://newsroom.wf.com/news-releases/news-details/2026/Wells-Fargo-introduces-AI-Teammate-bringing--AI-powered-support-to-the-advisor-experience/","text":"Wells Fargo has launched AI Teammate, an AI assistant built into Advisor Gateway for financial advisors, client associates and support teams. Advisor Gateway is the new desktop platform the firm launched in May 2026, bringing more than 200 tools into one place. AI Teammate will be available across all Wealth & Investment Management advisor channels. The bank says it has a pipeline of additional AI tools in development."}};
+const {SIG,SRC,CITIES,PRIORITY,NOCONTACT,S4_DEADLINE,S4_STAGES,S4_TRACK,S4_NEWS,NETWORK,MSRC,SHARES,VENDORS,DEMO}=DATA;
+let accounts=DATA.accounts;
+const ASOF=new Date("2026-11-15T00:00:00");const ASOF_TXT="15 Nov 2026";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=(d,ap)=>{const t=new Date(d+"T00:00:00");return (ap?"~":"")+t.toLocaleDateString("en-US",ap?{month:"short",year:"numeric"}:{month:"short",day:"numeric",year:"numeric"})};
+const days=d=>Math.round((ASOF-new Date(d+"T00:00:00"))/864e5);
+const rec=d=>{const n=days(d);return n<=183?1:n<=365?.6:.3};
+const srcOf=s=>SRC[s.src]||s.srcObj||["Source","#",""];
+const ext=(u,t)=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)} ↗</a>`;
+const STRN={1:"Strong",2:"Moderate",3:"Early"};
+const BFSI=["Banking","Insurance"];
+const initials=n=>n?n.split(/\s+/).filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase():"?";
+let tT;function toast(h){const t=$("toast");t.innerHTML=h;t.hidden=false;clearTimeout(tT);tT=setTimeout(()=>t.hidden=true,6500)}
+
+/* ---------- scoring ---------- */
+function scoreOf(a){
+  const fit=8+(PRIORITY.includes(a.sector)?6:4)+(a.sizeKnown?6:3);
+  let trig=0,pain=0;const lines=[];
+  a.signals.forEach(s=>{const d=SIG[s.type],pts=d.w*rec(s.date)*(s.scale||1);
+    d.group==="trigger"?trig+=pts:pain+=pts;
+    lines.push({label:d.label+(s.role?" · "+s.role:""),pts,note:(rec(s.date)<1?" ×"+rec(s.date)+" age":"")+(s.scale?" ×"+s.scale+" indirect":"")})});
+  const total=Math.round(fit+Math.min(50,trig)+Math.min(30,pain));
+  const hasT=a.signals.some(s=>SIG[s.type].group==="trigger"),hasP=a.signals.some(s=>SIG[s.type].group==="pain");
+  const tier=(total>=65||(hasT&&hasP&&total>=50))?1:total>=40?2:3;
+  return {fit,trig:Math.min(50,trig),pain:Math.min(30,pain),capT:trig>50,total,tier,lines};
+}
+const scored=()=>accounts.map(a=>({...a,sc:scoreOf(a)})).sort((a,b)=>a.sc.tier-b.sc.tier||b.sc.total-a.sc.total);
+const latest=a=>a.signals.map(s=>s.date).sort().pop();
+const latestSig=a=>[...a.signals].sort((x,y)=>y.date.localeCompare(x.date))[0];
+const timing=d=>{const n=days(d);return n<=90?"Fresh":n<=183?"Recent":"Older"};
+const STAGES=[["Signal found",a=>true],["Stakeholder named",a=>a.contacts.some(c=>c.n)],["Stakeholder spoke on adoption",a=>a.contacts.some(c=>c.s==="strong")],["Alumni route mapped",a=>(a.warm||[]).some(w=>w[3]!=null)]];
+
+/* ---------- brief ---------- */
+function renderBrief(){
+  const all=scored(),secs={};
+  all.forEach(a=>{(secs[a.sector]=secs[a.sector]||{n:0,score:0,sig:0,names:[]});secs[a.sector].n++;secs[a.sector].score+=a.sc.total;secs[a.sector].sig+=a.signals.length;secs[a.sector].names.push(a.name.replace(/ \(.*\)/,""))});
+  const sr=Object.entries(secs).sort((x,y)=>y[1].score-x[1].score);
+  const bf=SHARES.find(s=>s.ind==="BFSI"),bv=bf.vals.map(v=>v[1]);
+  const mk={Banking:`BFSI holds ${Math.min(...bv).toFixed(1)}–${Math.max(...bv)}% of DAP spend across ${bv.length} sources`,Insurance:`BFSI holds ${Math.min(...bv).toFixed(1)}–${Math.max(...bv)}% of DAP spend across ${bv.length} sources`,Healthcare:"Healthcare & life sciences ~18% share (Dataintelo)","Pharma & life sciences":"Healthcare & life sciences ~18% share (Dataintelo)"};
+  $("topSectors").innerHTML=sr.slice(0,3).map(([s,v])=>`<li><div><b>${esc(s)}</b> <span class="muted small">· ${v.n} companies · score ${v.score}</span><div class="small">${esc(v.names.join(", "))}</div>${mk[s]?`<div class="tiny muted">${esc(mk[s])}</div>`:""}</div></li>`).join("");
+  $("top5").innerHTML=all.slice(0,5).map(a=>{const s=latestSig(a),[pub,url]=srcOf(s);return `<tr><td><button class="oppbtn" type="button" data-acc="${a.id}">${esc(a.name)}</button><div class="tiny muted">${esc(a.sector)}</div></td><td class="small">${esc(a.whyNow||s.ev)}</td><td><span class="str s${a.sc.tier}">${STRN[a.sc.tier]} · ${a.sc.total}</span></td><td class="mono small" style="white-space:nowrap">${fmt(latest(a))}</td><td class="small">${ext(url,pub)}</td></tr>`}).join("");
+  $("top5").querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>openAcc(b.dataset.acc));
+  const s4n=S4_TRACK.length,ai=all.filter(a=>a.signals.some(s=>s.type==="ai")).length,bh=all.filter(a=>[...BFSI,"Healthcare","Pharma & life sciences"].includes(a.sector)).length,
+    nl=all.reduce((n,a)=>n+a.signals.filter(s=>s.type==="leader"&&days(s.date)<=183).length,0);
+  const acts=[
+   ["Build an S/4HANA adoption offer and take it to market before the Dec 2027 deadline",`${s4n} migrations tracked; 20–25k legacy SAP ERP customers still haven't licensed S/4HANA`,"s4trends","#s4hana"],
+   ["Go to market with systems integrators and migration partners","SNP Group, Celonis, Infosys and AWS appear in the sources around these moves; partners run the programmes","syng","#stakeholders"],
+   ["Package AI-adoption measurement for Copilot-scale rollouts",`${ai} companies on the board are rolling out AI to staff; AT&T reports change fatigue and hard-to-measure ROI`,"att","#board"],
+   ["Focus first on BFSI and healthcare",`BFSI is the largest DAP spender (${Math.min(...bv).toFixed(1)}–${Math.max(...bv)}% share); ${bh} of ${all.length} board companies are in these sectors`,null,"#market"],
+   ["Treat new tech leaders as a 90-day window",`${nl} new-leader signals in the last six months; new leaders set adoption baselines early`,null,"#stakeholders"]];
+  $("actions").innerHTML=acts.map(([t,e,src,href])=>`<li><b>${esc(t)}</b><span class="small muted">${esc(e)}${src?" · "+ext(SRC[src][1],SRC[src][0]):""} · <a href="${href}">see data</a></span></li>`).join("");
+  const nsig=all.reduce((n,a)=>n+a.signals.length,0),strong=all.filter(a=>a.sc.tier===1).length;
+  $("kpiTiles").innerHTML=[[all.length,"companies on the board"],[nsig,"sourced signals"],[strong,"strong opportunities"]].map(([b,t])=>`<div class="kpi"><b>${b}</b><span>${t}</span></div>`).join("");
+  const mx=Math.max(...sr.map(x=>x[1].sig));
+  $("sigSector").innerHTML=[...sr].sort((x,y)=>y[1].sig-x[1].sig).map(([s,v])=>`<div class="bar"><span>${esc(s)}</span><span class="track"><i style="width:${v.sig/mx*100}%"></i></span><span class="v">${v.sig}</span></div>`).join("");
+  $("oppStage").innerHTML=STAGES.map(([l,f],i)=>{const n=all.filter(f).length;return `<div class="bar"><span>${l}</span><span class="track"><i style="width:${n/all.length*100}%;background:var(--p${i+1})"></i></span><span class="v">${n}</span></div>`}).join("");
+}
+
+/* ---------- board ---------- */
+let range=0,selected=null,newIds=new Set();
+const inRange=a=>!range||a.signals.some(s=>days(s.date)<=range);
+function filtered(){const s=$("fSec").value,g=$("fSig").value,t=$("fStr").value;
+  return scored().filter(a=>inRange(a)&&(!s||a.sector===s)&&(!t||a.sc.tier==t)&&(!g||(g==="s4"?a.s4:a.signals.some(x=>x.type===g))))}
+const OUTLINE=[[-124.7,48.4],[-122.8,49],[-95.2,49],[-94.8,49.4],[-89.6,48],[-84.8,46.5],[-82.4,45.3],[-82.5,42.6],[-79,43.3],[-76.8,43.6],[-75,45],[-71.5,45],[-69.2,47.4],[-67.8,47.1],[-67,44.8],[-70.2,43.6],[-70.6,41.6],[-73.8,40.6],[-74,39],[-75.5,38.3],[-76,36.9],[-75.5,35.2],[-77.9,33.9],[-81,32],[-81.4,30.4],[-80,26.7],[-80.4,25.2],[-81.8,26.1],[-82.7,28],[-83,29.1],[-84.3,30],[-86.5,30.4],[-89.6,30.2],[-89.4,29],[-91.3,29.3],[-93.8,29.7],[-95,29.3],[-97.4,27.6],[-97.2,25.9],[-99.1,26.4],[-100.5,28.3],[-101.4,29.8],[-103,29],[-104.6,29.7],[-106.5,31.8],[-108.2,31.8],[-111.1,31.3],[-114.8,32.5],[-117.1,32.5],[-118.5,34],[-120.6,34.6],[-121.9,36.6],[-122.5,37.8],[-123.8,39.8],[-124.2,41.8],[-124.1,43.7],[-124,46.3]];
+const px=(lat,lon)=>[20+(lon+125)*15.6,14+(50-lat)*19.2];
+function drawMap(rows){
+  let h=`<polygon points="${OUTLINE.map(([lo,la])=>px(la,lo).map(v=>v.toFixed(1)).join(",")).join(" ")}" fill="var(--land)" stroke="var(--land-line)" stroke-width="1.5" stroke-linejoin="round"/>`;
+  const seen={};
+  const pts=[...rows].sort((a,b)=>a.sc.total-b.sc.total).map(r=>{let [x,y]=px(...(CITIES[r.city]||[39,-98]));seen[r.city]=(seen[r.city]||0)+1;const k=seen[r.city];if(k>1){x+=(k-1)*14;y-=(k-1)*10}return {r,x,y}});
+  const placed=[],labelAt={};
+  [...pts].sort((a,b)=>(b.r.id===selected)-(a.r.id===selected)||b.r.sc.total-a.r.sc.total).forEach(({r,x,y})=>{
+    if(!(r.id===selected||r.sc.tier===1))return;
+    const rad=6+r.sc.total/14,txt=r.name.replace(/ \(.*\)/,"")+" · "+r.sc.total,w=txt.length*10.4+4,hg=22;
+    const L=x>700?"end":"start",R=x>700?"start":"end";
+    for(const [an,dy] of [[L,0],[L,18],[L,-18],[R,0],[R,18],[L,36]]){const lx=an==="end"?x-rad-6:x+rad+6,bx=an==="end"?lx-w:lx,by=y+4+dy-12;
+      if(bx<0||bx+w>960)continue;
+      const hit=placed.some(p=>bx<p.x+p.w+4&&bx+w+4>p.x&&by<p.y+p.h+2&&by+hg+2>p.y)||pts.some(o=>o.r.id!==r.id&&Math.abs(o.x-(bx+w/2))<w/2+6&&o.y>by-6&&o.y<by+hg+6);
+      if(!hit){placed.push({x:bx,y:by,w,h:hg});labelAt[r.id]={lx,ly:y+4+dy,an,txt};return}}});
+  pts.forEach(({r,x,y})=>{const c=`var(--t${r.sc.tier})`,rad=6+r.sc.total/14,L=labelAt[r.id];
+    h+=`<g class="pin${r.id===selected?" sel":""}" data-id="${r.id}" tabindex="0" role="button" aria-label="${esc(r.name)}, ${STRN[r.sc.tier]}, score ${r.sc.total}"><title>${esc(r.name)} · ${r.sc.total}</title><circle class="halo" cx="${x}" cy="${y}" r="${rad+7}" fill="${c}"/><circle class="core" cx="${x}" cy="${y}" r="${rad}" fill="${c}"/>${L?`<text x="${L.lx}" y="${L.ly}" text-anchor="${L.an}">${esc(L.txt)}</text>`:""}</g>`});
+  $("map").innerHTML=h;
+  $("map").querySelectorAll(".pin").forEach(g=>{const go=()=>{selected=g.dataset.id;renderBoard()};g.onclick=go;g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
+}
+function renderBoard(){
+  const rows=filtered();
+  $("bCount").textContent=rows.length;$("bSec").textContent=new Set(rows.map(a=>a.sector)).size;
+  drawMap(rows);
+  $("list").innerHTML=rows.length?rows.map(r=>`<button class="row${r.id===selected?" sel":""}" data-id="${r.id}" type="button"><span class="score" style="color:var(--t${r.sc.tier})">${r.sc.total}</span>
+    <span style="min-width:0"><span class="nm">${esc(r.name)}${r.s4?`<span class="tag">S/4HANA</span>`:""}${newIds.has(r.id)?`<span class="tag new">Added this session</span>`:""}</span><span class="meta">${esc(r.sector)} · ${[...new Set(r.signals.map(s=>SIG[s.type].label.split(" /")[0]))].join(" · ")}</span></span>
+    <span class="side"><span class="str s${r.sc.tier}">${STRN[r.sc.tier]}</span><span class="mono">${fmt(latest(r))}</span></span></button>`).join(""):`<p class="muted" style="padding:12px 6px">No companies match these filters.</p>`;
+  $("list").querySelectorAll(".row").forEach(b=>b.onclick=()=>{selected=b.dataset.id;renderBoard();if(matchMedia("(max-width:980px)").matches)$("detail").scrollIntoView({block:"start"})});
+  const cur=rows.find(a=>a.id===selected)||rows[0];
+  if(cur){selected=cur.id;renderDetail(cur)}else $("detail").innerHTML=`<p class="muted">No company selected.</p>`;
+}
+const factsUrl=a=>a.ownership==="public"&&a.ticker?"https://finance.yahoo.com/quote/"+a.ticker+"/profile":"https://www.crunchbase.com/textsearch?q="+encodeURIComponent(a.name.replace(/ \(.*\)/,""));
+const secUrl=a=>a.ownership==="public"&&a.ticker?"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company="+encodeURIComponent(a.secName||a.name)+"&type=10-K":"";
+function personHTML(c){const [pub,url]=c.src?SRC[c.src]:(c.srcObj||["",""]);
+  return `<div class="person"><span class="av">${initials(c.n||c.t)}</span><div style="min-width:0;display:flex;flex-direction:column;gap:2px"><div><b>${esc(c.n||c.t)}</b>${c.n?` <span class="muted small">· ${esc(c.t)}</span>`:""} <span class="str ${c.s}">${c.s[0].toUpperCase()+c.s.slice(1)} relevance</span></div><div class="why">${esc(c.why)}</div><div class="tiny">${url?ext(url,pub):""}${PRIVATE&&c.li?" · "+ext(c.li,"LinkedIn"):""}</div></div></div>`}
+function renderDetail(a){
+  const sc=a.sc,uses=[...new Set(a.signals.flatMap(s=>SIG[s.type].uses||[]))];
+  const sigs=[...a.signals].sort((x,y)=>y.date.localeCompare(x.date)).map(s=>{const [pub,url,tr]=srcOf(s),d=SIG[s.type];
+    return `<div class="sig ${d.group}"><div class="top"><span class="kind">${esc(d.label)}</span><span class="muted mono">${fmt(s.date,s.approx)}</span>${s.scale?`<span class="chip">indirect</span>`:""}</div><p class="small">${esc(s.ev)}</p><span class="src">${ext(url,pub)} <span class="trust">(${esc(tr||"source added in this session")})</span></span></div>`}).join("");
+  $("detail").innerHTML=`<div class="dhead"><div style="min-width:0;display:flex;flex-direction:column;gap:6px"><h2>${esc(a.name)}</h2>
+    <div class="chips"><span class="chip">${esc(a.sector)}</span><span class="chip">HQ ${esc(a.city)}</span>${a.size?`<span class="chip">${esc(a.size)}</span>`:""}${a.parent?`<span class="chip">US unit of ${esc(a.parent)}</span>`:""}${a.ownership?`<a class="chip" href="${factsUrl(a)}" target="_blank" rel="noopener">Company facts ↗</a>`:""}${a.ownership&&secUrl(a)?`<a class="chip" href="${secUrl(a)}" target="_blank" rel="noopener">SEC filings ↗</a>`:""}${a.s4?`<a class="chip" href="#s4hana">On the S/4HANA tracker</a>`:""}</div></div>
+    <div style="text-align:right;flex:none"><div class="big" style="color:var(--t${sc.tier})">${sc.total}</div><span class="str s${sc.tier}">${STRN[sc.tier]}</span></div></div>
+   ${a.whyNow?`<p><b>Why now:</b> ${esc(a.whyNow)}</p>`:""}
+   <div style="display:flex;flex-direction:column;gap:8px"><h3>Signals</h3>${sigs}</div>
+   <div class="sub"><h3>Stakeholders</h3>${a.contacts.map(personHTML).join("")}</div>
+   <div class="sub"><h3>Where a DAP could help</h3><ul class="small">${uses.map(u=>`<li>${esc(u)}</li>`).join("")}</ul><span class="tiny muted">General DAP capabilities, not any vendor's product.</span></div>
+   ${a.q?`<div class="sub"><h3>Question to explore with them</h3><p class="small">${esc(a.q)}</p></div>`:""}
+   <details><summary>Why ${sc.total}?</summary><table class="breakdown"><tbody><tr><td>Fit · US HQ, ${PRIORITY.includes(a.sector)?"high-spend sector":"other sector"}, size ${a.sizeKnown?"known":"not verified"}</td><td>+${sc.fit}</td></tr>
+     ${sc.lines.map(l=>`<tr><td>${esc(l.label)}<span class="muted">${l.note}</span></td><td>+${l.pts.toFixed(1)}</td></tr>`).join("")}
+     ${sc.capT?`<tr><td class="muted">Trigger points capped at 50</td><td>${sc.trig.toFixed(0)}</td></tr>`:""}<tr class="total"><td>Score</td><td>${sc.total}</td></tr></tbody></table></details>`;
+}
+function openAcc(id){selected=id;if(range&&!scored().find(a=>a.id===id&&inRange(a))){range=0;syncRange()}["fSec","fSig","fStr"].forEach(k=>$(k).value="");location.hash="board";if(view==="board")renderBoard()}
+function syncRange(){document.querySelectorAll("[data-range]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.range===range)))}
+
+/* ---------- S/4HANA ---------- */
+let s4f="";
+function renderS4(){
+  const dl=new Date(S4_DEADLINE+"T23:59:59");$("s4days").textContent=Math.max(0,Math.ceil((dl-new Date())/864e5)).toLocaleString("en-US");
+  $("s4deadSrc").href=SRC.s4dead[1];
+  const y0=2024,y1=2034,pc=d=>((d-new Date(y0+"-01-01"))/(new Date(y1+"-01-01")-new Date(y0+"-01-01"))*100);
+  const seg=(a,b,c,t,s)=>`<div class="seg4 ${c}" style="width:${(pc(new Date(b))-pc(new Date(a))).toFixed(2)}%"><b>${t}</b><span>${s}</span></div>`;
+  const tp=Math.min(100,Math.max(0,pc(new Date())));
+  $("s4line").innerHTML=`<div class="today" style="left:${tp.toFixed(2)}%"><span>Today</span></div><div class="tlbar">${seg("2024-01-01","2028-01-01","a","Mainstream","to end-2027")}${seg("2028-01-01","2031-01-01","b","Extended","2028–2030, extra fee")}${seg("2031-01-01","2034-01-01","c","Transition option","to 2033, conditions")}</div><div class="years">${[2024,2026,2028,2030,2032,2034].map(y=>`<span>${y}</span>`).join("")}</div>`;
+  const st=[["39%","of ~35,000 ECC customers had licensed S/4HANA by end-2024","s4gartner","Gartner via The Register"],["34%","fully moved to S/4HANA, while 55% say they are deploying it","s4trends","SAPinsider, Apr 2026"],["20–25k","legacy SAP ERP customers still haven't licensed S/4HANA","s4trends","SAPinsider, Apr 2026"],["38,000","training hours Clorox gave 5,000+ employees for one go-live","clxDone","SAPinsider, Feb 2026"]];
+  $("s4stats").innerHTML=st.map(([b,t,s,l])=>`<div class="kpi"><b>${b}</b><span>${t}</span>${ext(SRC[s][1],l)}</div>`).join("");
+  const sc=Object.fromEntries(scored().map(a=>[a.id,a.sc]));
+  $("kanban").innerHTML=S4_STAGES.map(([k,label,why])=>{const items=S4_TRACK.filter(t=>t.stage===k);
+    return `<div class="kcol"><div class="khead"><b>${label}</b><span class="mono muted">${items.length}</span></div><div class="kwhy">What helps: ${esc(why)}</div>
+    ${items.map(t=>{const a=t.acc&&sc[t.acc],[pub,url]=SRC[t.src];
+      const inner=`<span class="nm">${esc(t.co)}</span><span class="meta">${esc(t.city)} · ${fmt(t.date,t.approx)}</span><span>${esc(t.note)}</span>${a?`<span class="meta">Board score ${a.total} · ${STRN[a.tier]}</span>`:`<span class="meta">On the watchlist · ${ext(url,pub)}</span>`}`;
+      return t.acc?`<button type="button" class="kcard" data-acc="${t.acc}">${inner}</button>`:`<div class="kcard">${inner}</div>`}).join("")}</div>`}).join("");
+  $("kanban").querySelectorAll("button[data-acc]").forEach(b=>b.onclick=()=>openAcc(b.dataset.acc));
+  const imp=[["The deadline creates a dated wave of demand: about 20–25k legacy SAP ERP customers have yet to license S/4HANA.","s4trends"],
+   ["SAP now owns a DAP (WalkMe), so SAP-led deals may default to it. Independent DAPs would need to compete on covering the other apps the same users work in.","walkme"],
+   ["Change management is named as a top migration hurdle, so the adoption budget is justified by the programme itself.","s4hurdles"],
+   ["Retiring SAP experts take process knowledge with them, which raises the value of guidance captured inside the app.","s4retire"]];
+  $("s4imp").innerHTML=imp.map(([t,s])=>`<li>${esc(t)} <span class="tiny">${ext(SRC[s][1],SRC[s][0])}</span></li>`).join("");
+  $("feed").innerHTML=S4_NEWS.filter(n=>!s4f||n[1]===s4f).map(([d,k,t,s])=>{const [pub,url,tr]=SRC[s];return `<li><span class="d">${fmt(d)}</span><span><span class="k">${k==="company"?"Company":"Market"}</span>${esc(t)}<br><span class="small">${ext(url,pub)}</span> <span class="trust">(${esc(tr)})</span></span></li>`}).join("");
+}
+
+/* ---------- market ---------- */
+function renderMarket(){
+  const fbi=MSRC.find(m=>m.anchor);document.querySelectorAll(".fbi").forEach(a=>a.href=fbi.url);
+  $("msrc").innerHTML=MSRC.map(s=>`<tr class="${s.anchor?"anchor":""}"><td>${ext(s.url,s.p)}${s.anchor?" <span class='tiny muted'>(anchor)</span>":""}</td><td class="n">${esc(s.base)}</td><td class="n">${esc(s.fc)}</td><td class="n">${esc(s.cagr)}</td><td>${esc(s.us)}</td><td class="n">${esc(s.up)}</td><td class="trust">${esc(s.trust)}</td></tr>`).join("");
+  const W=560,H=240,L=46,R=20,T=20,B=34,yM=5,xs=y=>L+(y-2025)/(2034-2025)*(W-L-R),ys=v=>T+(1-v/yM)*(H-T-B);
+  let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="DAP market grows from 1.24 billion dollars in 2025 to 4.37 billion in 2034">`;
+  for(let v=0;v<=5;v++)g+=`<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${L-8}" y="${ys(v)+4}" text-anchor="end">$${v}B</text>`;
+  let p="";for(let y=2026;y<=2034;y++){const v=1.59*Math.pow(1.135,y-2026);p+=(y===2026?"M":"L")+xs(y).toFixed(1)+","+ys(v).toFixed(1)}
+  g+=`<path d="${p}L${xs(2034)},${ys(0)}L${xs(2026)},${ys(0)}Z" fill="var(--accent)" opacity=".1"/><path d="M${xs(2025)},${ys(1.24)}L${xs(2026)},${ys(1.59)}" stroke="var(--accent)" stroke-width="2.5" fill="none"/><path d="${p}" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-dasharray="5 4"/>`;
+  [[2025,1.24],[2026,1.59],[2034,4.37]].forEach(([y,v])=>g+=`<circle cx="${xs(y)}" cy="${ys(v)}" r="5" fill="var(--accent)" stroke="var(--panel)" stroke-width="2"/><text class="v" x="${xs(y)+(y===2034?-8:8)}" y="${ys(v)-10}" text-anchor="${y===2034?"end":"start"}">$${v}B</text>`);
+  [2025,2026,2028,2030,2032,2034].forEach(y=>g+=`<text x="${xs(y)}" y="${H-12}" text-anchor="middle">${y}</text>`);
+  $("growth").innerHTML=g+`</svg><p class="tiny muted">${ext(fbi.url,"Fortune Business Insights")}: $1.24B (2025), $1.59B (2026), $4.37B (2034). Intermediate years drawn at the stated 13.5% CAGR.</p>`;
+  const di=MSRC.find(m=>/Dataintelo/.test(m.p));$("pieSrc").href=di.url;
+  const PIE=[["BFSI",24.6,18.4,"--p1"],["Healthcare",18.3,20.6,"--p2"],["IT & telecom",16.7,19.2,"--p3"],["Retail",13.2,18.9,"--p4"],["Education",9.4,23.1,"--p5"],["Others",17.8,17.5,"--p6"]];
+  const cx=100,cy=100,RO=92,RI=56;let ang=-Math.PI/2,sv=`<svg viewBox="0 0 200 200" role="img" aria-label="DAP share by industry: ${PIE.map(p=>p[0]+" "+p[1]+"%").join(", ")}">`;
+  PIE.forEach(([n,v,gr,c])=>{const a2=ang+v/100*2*Math.PI,lg=v>50?1:0,P=(r,t)=>[(cx+r*Math.cos(t)).toFixed(2),(cy+r*Math.sin(t)).toFixed(2)];
+    const [x1,y1]=P(RO,ang),[x2,y2]=P(RO,a2),[x3,y3]=P(RI,a2),[x4,y4]=P(RI,ang);
+    sv+=`<path d="M${x1},${y1}A${RO},${RO} 0 ${lg} 1 ${x2},${y2}L${x3},${y3}A${RI},${RI} 0 ${lg} 0 ${x4},${y4}Z" fill="var(${c})" stroke="var(--panel)" stroke-width="2"><title>${n}: ${v}% share, ${gr}% CAGR</title></path>`;
+    const mid=(ang+a2)/2,[lx,ly]=P((RO+RI)/2,mid);if(v>=9)sv+=`<text x="${lx}" y="${(+ly+4).toFixed(2)}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${Math.round(v)}%</text>`;ang=a2});
+  sv+=`<text x="100" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Share</text><text x="100" y="114" text-anchor="middle" font-size="10" fill="currentColor" opacity=".7">by industry</text></svg>`;
+  const cm=Math.max(...PIE.map(p=>p[2]));
+  $("pie").innerHTML=sv+`<table><thead><tr><th>Industry</th><th class="n">Share</th><th class="n">CAGR</th></tr></thead><tbody>${PIE.map(([n,v,gr,c])=>`<tr><td><span class="sw" style="background:var(${c})"></span>${n}</td><td class="n">${v}%</td><td class="n">${gr===cm?"<b>"+gr+"%</b>":gr+"%"}</td></tr>`).join("")}</tbody></table>`;
+  const mx=45;
+  $("shares").innerHTML=SHARES.map(r=>{if(!r.vals.length)return `<div class="share"><span>${esc(r.ind)}</span><span class="range"></span><span class="tiny muted">not public</span></div><div class="tiny muted" style="margin-top:-8px">${esc(r.note)}</div>`;
+    const v=r.vals.map(x=>x[1]),lo=Math.min(...v),hi=Math.max(...v),avg=v.reduce((a,b)=>a+b,0)/v.length;
+    return `<div class="share" title="${esc(r.vals.map(x=>x[0]+": "+x[1]+"%").join(" · "))}"><span>${esc(r.ind)}</span><span class="range"><i style="left:${lo/mx*100}%;width:${Math.max(1.5,(hi-lo)/mx*100)}%"></i><b style="left:calc(${avg/mx*100}% - 1px)"></b></span><span class="mono">${v.length>1?lo.toFixed(1)+"–"+hi.toFixed(0)+"%":avg.toFixed(1)+"%"}</span></div><div class="tiny muted" style="margin-top:-8px">${esc(r.vals.map(x=>x[0]+" "+x[1]+"%").join(" · "))} · ${esc(r.note)}</div>`}).join("")+`<p class="tiny muted">Bar = range across sources, tick = average, scale 0–45%. Publishers are linked in the table below.</p>`;
+  $("vendors").innerHTML=VENDORS.map(x=>`<tr><td><b>${esc(x.n)}</b></td><td class="small">${esc(x.what)}</td><td class="small">${esc(x.fact)}</td><td class="small">${ext(SRC[x.src][1],SRC[x.src][0])}<div class="trust">${esc(SRC[x.src][2])}</div></td></tr>`).join("");
+  $("landNote").innerHTML=`<b>Market structure:</b> Everest Group assessed 25 DAP providers in its 2024 PEAK Matrix (${ext(SRC.everest[1],"Everest Group")}). That points to a fragmented market in which one platform owner, SAP, now holds a DAP of its own. <span class="label">My read</span>`;
+}
+
+/* ---------- stakeholders ---------- */
+function execs(){return scored().flatMap(a=>a.contacts.filter(c=>c.n).map(c=>({...c,co:a.name,acc:a.id,sector:a.sector,tier:a.sc.tier})))}
+function renderStake(){
+  const q=$("eq").value.trim().toLowerCase(),sec=$("eSec").value,st=$("eStr").value,ord=["strong","medium","weak"];
+  const all=execs(),rows=all.filter(c=>(!q||[c.n,c.t,c.co].join(" ").toLowerCase().includes(q))&&(!sec||c.sector===sec)&&(!st||c.s===st)).sort((a,b)=>ord.indexOf(a.s)-ord.indexOf(b.s)||b.date.localeCompare(a.date));
+  $("execCount").textContent=`${rows.length} of ${all.length}`;
+  $("egrid").innerHTML=rows.map(c=>{const [pub,url,tr]=c.src?SRC[c.src]:(c.srcObj||["","",""]);return `<article class="ccard"><div class="hd"><span class="av">${initials(c.n)}</span><div style="min-width:0"><div class="nm">${esc(c.n)}</div><div class="ti">${esc(c.t)} · ${esc(c.co)}</div></div><span class="str ${c.s}">${c.s[0].toUpperCase()+c.s.slice(1)}</span></div>
+    <div class="why">${esc(c.why)}</div><div class="ft"><span class="mono">${fmt(c.date)}</span>${url?ext(url,pub):""}${PRIVATE&&c.li?ext(c.li,"LinkedIn"):""}<button class="btn sm" type="button" data-acc="${c.acc}" style="margin-left:auto">Open company</button></div></article>`}).join("")||`<p class="muted">No executives match.</p>`;
+  $("egrid").querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>openAcc(b.dataset.acc));
+  const RT={"Partner ecosystem":"p","Industry event":"e","Alumni network":"a"};
+  $("warm").innerHTML=scored().filter(a=>a.warm).map(a=>{const c=a.contacts[0];return `<tr><td><button class="oppbtn" type="button" data-acc="${a.id}">${esc(a.name)}</button><div class="tiny muted">${esc(a.sector)}</div></td><td class="small">${esc(c?c.t:"")}</td><td>${a.warm.map(([t,txt,s,ni])=>`<div class="route"><span class="rt ${RT[t]}">${esc(t)}</span><span>${esc(txt)}${s&&SRC[s]?" · "+ext(SRC[s][1],SRC[s][0]):""}${ni!=null&&NETWORK[ni]?` <span class="tiny muted">(${PRIVATE&&NETWORK[ni].n?esc(NETWORK[ni].n):"see network card "+(ni+1)})</span>`:""}</span></div>`).join("")}</td></tr>`}).join("");
+  $("warm").querySelectorAll("[data-acc]").forEach(b=>b.onclick=()=>openAcc(b.dataset.acc));
+  const links=NETWORK.map((_,i)=>scored().filter(a=>a.warm&&a.warm.some(w=>w[3]===i)).length);
+  $("netNote").textContent=PRIVATE?"private copy: names and links shown":"shown by role only · no names, profiles or photos";
+  $("ngrid").innerHTML=NETWORK.map((p,i)=>`<article class="ccard"><div class="hd"><span class="av">${i+1}</span><div style="min-width:0"><div class="nm">${PRIVATE&&p.n?esc(p.n):esc(p.role)}</div><div class="ti">${PRIVATE&&p.n?esc(p.role)+" · "+esc(p.co):esc(p.org)}</div></div><span></span></div>
+    <div class="chips"><span class="chip">${esc(p.g)}</span>${links[i]?`<span class="chip">Route for ${links[i]} ${links[i]>1?"companies":"company"}</span>`:""}</div><div class="why">${esc(p.why)}</div>
+    ${PRIVATE&&p.src?`<div class="ft">${ext(SRC[p.src][1],SRC[p.src][0])}${p.li?ext(p.li,"LinkedIn"):""}${p.verified?`<span class="label ok">IIM link confirmed</span>`:`<span class="label">Check before outreach</span>`}</div>`:""}</article>`).join("");
+  $("watch").innerHTML=NOCONTACT.map(w=>`<tr><td><b>${esc(w.co)}</b></td><td class="small">${esc(w.what)} <span class="muted mono">(${fmt(w.date)})</span></td><td class="small">${ext(SRC[w.src][1],SRC[w.src][0])}</td></tr>`).join("");
+}
+
+/* ---------- AI reader ---------- */
+let sampleFn=null;
+(async()=>{try{sampleFn=window.claude&&window.claude.use?await window.claude.use("sample"):null}catch(e){sampleFn=null}$("aiMode").textContent=sampleFn?"Built-in AI available":"Rule-based mode (no built-in AI here)"})();
+setTimeout(()=>{if($("aiMode").textContent.startsWith("Checking"))$("aiMode").textContent="Rule-based mode (no built-in AI here)"},8000);
+const RULES=[["migration",/(migrat|go-live|went live|new (desktop |technology |core )?platform|brings? .{0,30}tools? into one|S\/4HANA|Workday|Salesforce|ServiceNow|cloud transformation|moderni[sz])/i],
+ ["ai",/(\bAI\b|artificial intelligence|copilot|agentforce|generative|LLM|AI assistant)/i],["merger",/(acqui|merger|\bmerge\b)/i],
+ ["leader",/(appoint|\bnamed\b|\bnames\b|joins as|chief (information|operating|human resources|digital|technology|people|ai) officer)/i],
+ ["erpIssue",/(ERP (issue|problem|stabili)|outage|delayed invoic|implementation (delay|overrun))/i],["struggle",/(adoption gap|low (usage|adoption)|change fatigue|resist)/i],
+ ["adoptionHire",/(change management|digital adoption|training specialist|enablement manager)/i],["hiring",/(hiring|open roles|new positions|\bhires\b|recruit)/i],
+ ["compliance",/(regulat|compliance|consent order|\bfined?\b|\bAML\b)/i],["pressure",/(efficien|productivity|cost[- ]cut|layoff|restructur)/i],
+ ["complaints",/(clunky|too many tools|frustrat)/i],["competitor",/(WalkMe|Whatfix|Pendo|Userlane|Apty|AppLearn)/i]];
+function ruleExtract(text,date){const ss=text.replace(/\s+/g," ").split(/(?<=[.!?])\s+/),f=[];RULES.forEach(([t,re])=>{const s=ss.find(x=>re.test(x));if(s&&!f.some(x=>x.type===t))f.push({type:t,date,ev:s.length>200?s.slice(0,197)+"…":s})});return f}
+async function aiExtract(text,date,co){const types=Object.entries(SIG).map(([k,v])=>`${k} = ${v.label}`).join("; ");
+  const v=await sampleFn.json(`From this news article about ${co}, extract signals that the company may need help getting employees to adopt new software or AI tools (digital adoption). Allowed types: ${types}. Only include signals the text clearly supports. For each give a short paraphrased evidence line (max 25 words, no invented facts); for "leader" give the role and, if named, the person's name. Return JSON: {"signals":[{"type":"","evidence":"","role":"","name":""}]}.\n\nARTICLE:\n${text.slice(0,8000)}`,{modelTier:"quick"});
+  return ((v&&v.signals)||[]).filter(s=>SIG[s.type]).map(s=>({type:s.type,date,ev:String(s.evidence||"").slice(0,220),role:s.type==="leader"&&s.role?String(s.role).slice(0,60):undefined,person:s.name?String(s.name).slice(0,60):""}))}
+function initReader(){
+  const secs=[...new Set(accounts.map(a=>a.sector).concat(["Public sector","Tech","Logistics"]))].sort();
+  $("pSec").innerHTML=secs.map(s=>`<option>${esc(s)}</option>`).join("");
+  $("pCity").innerHTML=Object.keys(CITIES).sort().map(c=>`<option>${esc(c)}</option>`).join("");
+  $("btnDemo").onclick=()=>{$("pCo").value=DEMO.co;$("pSec").value=DEMO.sec;$("pCity").value=DEMO.city;$("pDate").value=DEMO.date;$("pUrl").value=DEMO.url;$("pText").value=DEMO.text;$("pStatus").textContent="Sample loaded: a public Wells Fargo newsroom release."};
+  $("pform").addEventListener("submit",async e=>{e.preventDefault();
+    const co=$("pCo").value.trim(),url=$("pUrl").value.trim(),date=$("pDate").value,text=$("pText").value.trim();
+    if(!co||!url||!date||text.length<40){$("pStatus").textContent="Add the company, URL, date and at least a paragraph of text.";return}
+    $("btnRead").disabled=true;$("pStatus").innerHTML=`<span class="spin"></span> ${sampleFn?"AI is reading the article…":"Reading with keyword rules…"}`;
+    let sigs=[],how="keyword rules";if(sampleFn){try{sigs=await aiExtract(text,date,co);how="built-in AI"}catch(_){sigs=[]}}
+    if(!sigs.length){sigs=ruleExtract(text,date);how="keyword rules"}$("btnRead").disabled=false;
+    if(!sigs.length){$("pStatus").textContent="No adoption signals found in this text. Nothing added.";$("found").hidden=true;return}
+    let host="Source";try{host=new URL(url).hostname.replace(/^www\./,"")}catch(_){}
+    sigs.forEach(s=>s.srcObj=[host,url,"added in this session; verify before relying on it"]);
+    const people=sigs.filter(s=>s.person).map(s=>({n:s.person,t:s.role||"",s:"medium",why:"Named in the article you added.",date,srcObj:[host,url]}));
+    let a=accounts.find(x=>x.name.toLowerCase()===co.toLowerCase());
+    if(a){a.signals.push(...sigs);a.contacts.push(...people)}else{a={id:"u"+Date.now(),name:co,sector:$("pSec").value,city:$("pCity").value,size:"",signals:sigs,contacts:people.length?people:[{n:"",t:"Stakeholder not named in the article",s:"weak",why:"Find the programme owner in a public source.",date,srcObj:[host,url]}]};accounts.push(a)}
+    newIds.add(a.id);const sc=scoreOf(a);
+    $("pStatus").textContent=`Found ${sigs.length} signal${sigs.length>1?"s":""} with ${how}.`;
+    $("found").hidden=false;$("found").innerHTML=`<h3 style="margin-bottom:10px">${esc(a.name)} · <span class="str s${sc.tier}">${STRN[sc.tier]} · ${sc.total}</span> <span class="label">Added this session</span></h3><div class="found">${sigs.map(s=>`<div class="sig ${SIG[s.type].group}"><div class="top"><span class="kind">${esc(SIG[s.type].label)}</span>${s.person?`<span class="chip">${esc(s.person)}</span>`:""}</div><p class="small">${esc(s.ev)}</p></div>`).join("")}</div><div class="toolbar" style="margin-top:12px"><button class="btn" type="button" id="goBoard">See it on the board</button><span class="tiny muted">Session only: it disappears on reload and isn't counted in the published totals.</span></div>`;
+    $("goBoard").onclick=()=>openAcc(a.id);
+    toast(`<b>${esc(a.name)}</b> scored ${sc.total} (${STRN[sc.tier]}) · ${sigs.length} signal${sigs.length>1?"s":""}`);
+  });
+}
+
+/* ---------- simulated refresh + export ---------- */
+function initBoard(){
+  const secs=[...new Set(accounts.map(a=>a.sector))].sort();
+  $("fSec").innerHTML+=secs.map(s=>`<option>${esc(s)}</option>`).join("");$("eSec").innerHTML+=secs.map(s=>`<option>${esc(s)}</option>`).join("");
+  const used=[...new Set(accounts.flatMap(a=>a.signals.map(s=>s.type)))];
+  $("fSig").innerHTML+=`<option value="s4">SAP S/4HANA move</option>`+used.map(t=>`<option value="${t}">${esc(SIG[t].label)}</option>`).join("");
+  ["fSec","fSig","fStr"].forEach(k=>$(k).onchange=renderBoard);
+  document.querySelectorAll("[data-range]").forEach(b=>b.onclick=()=>{range=+b.dataset.range;syncRange();renderBoard()});
+  ["eq","eSec","eStr"].forEach(k=>$(k).addEventListener("input",renderStake));
+  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{s4f=b.dataset.f;document.querySelectorAll("[data-f]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderS4()});
+  $("btnScan").onclick=()=>{const b=$("btnScan"),t=$("scanText");b.disabled=true;
+    const steps=["Simulated: searching news and press releases…","Simulated: reading articles…","Simulated: scoring companies…"];let i=0;t.innerHTML=`<span class="spin"></span> ${steps[0]}`;
+    const iv=setInterval(()=>{i++;if(i<steps.length){t.innerHTML=`<span class="spin"></span> ${steps[i]}`;return}clearInterval(iv);b.disabled=false;
+      t.textContent=`Simulated run complete · no live feeds are connected in this prototype · board unchanged at ${accounts.length} companies`;
+      toast("<b>Simulated refresh.</b> This prototype doesn't fetch news yet; signals are verified and added by hand. Scheduled scanning is on the roadmap.")},900)};
+  $("btnExport").onclick=()=>{const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+    const rows=filtered(),csv=[["Company","Sector","HQ","Strength","Score","Signal types","Latest signal","Why now","Stakeholders (public)","Sources"].map(q).join(",")].concat(rows.map(a=>[a.name,a.sector,a.city,STRN[a.sc.tier],a.sc.total,[...new Set(a.signals.map(s=>SIG[s.type].label))].join("; "),latest(a),a.whyNow||"",a.contacts.filter(c=>c.n).map(c=>c.n+" ("+c.t+")").join("; "),[...new Set(a.signals.map(s=>srcOf(s)[1]))].join(" ")].map(q).join(","))).join("\n");
+    try{const u=URL.createObjectURL(new Blob([csv],{type:"text/csv"})),l=document.createElement("a");l.href=u;l.download="adoption-signal-radar.csv";document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast("CSV downloaded")}
+    catch(e){navigator.clipboard&&navigator.clipboard.writeText(csv).then(()=>toast("CSV copied to clipboard"),()=>toast("Download blocked here"))}};
+}
+
+/* ---------- about ---------- */
+function renderAbout(){
+  const rs=[["Companies, signals, executives, dates","Real","Taken from public sources I opened and checked; each links to its source."],
+   ["Market size and industry shares","Real","Published estimates, linked; they disagree, so the range is shown."],
+   ["S/4HANA stages","Estimate","Stage is my estimate from public announcements."],
+   ["Scores and strength labels","Model","My own weights; not yet validated against outcomes."],
+   ["Recommended actions","Illustrative","My reading of the signals, not validated with any company."],
+   ["Warm-intro routes","Ideas","Possible routes; partner names come from the sources, not from relationships."],
+   ["Refresh button","Simulated","No live feeds are connected; nothing is fetched."],
+   ["AI reader","Beta","Built-in AI when the host provides it, otherwise keyword rules; results are session-only."]];
+  $("realsim").innerHTML=rs.map(([a,b,c])=>`<tr><td><b>${a}</b></td><td><span class="label${b==="Real"?" ok":""}">${b}</span></td><td class="small muted">${c}</td></tr>`).join("");
+}
+
+/* ---------- theme + routing ---------- */
+const root=document.documentElement;
+try{const t=localStorage.getItem("asr-theme");if(t)root.dataset.theme=t}catch(e){}
+$("themeBtn").onclick=()=>{const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;root.dataset.theme=dark?"light":"dark";try{localStorage.setItem("asr-theme",root.dataset.theme)}catch(e){}};
+const VIEWS=["brief","board","s4hana","market","stakeholders","reader","about"];let view="brief";
+function route(){const h=location.hash.slice(1),sub=h.startsWith("st-")?h:null;view=VIEWS.includes(h)?h:sub?"stakeholders":"brief";
+  VIEWS.forEach(v=>$("v-"+v).hidden=v!==view);
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.view===view?"page":"false"));
+  ({brief:renderBrief,board:renderBoard,s4hana:renderS4,market:renderMarket,stakeholders:renderStake,about:renderAbout})[view]?.();
+  if(sub){const el=$(sub);el&&el.scrollIntoView({block:"start"})}else window.scrollTo(0,0)}
+document.querySelectorAll(".asof").forEach(e=>e.textContent=ASOF_TXT);
+$("fbiLink").href=MSRC.find(m=>m.anchor).url;
+initBoard();initReader();
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
