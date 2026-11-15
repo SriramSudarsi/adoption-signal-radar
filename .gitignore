@@ -1,0 +1,9 @@
+# Private working copy: contains names and LinkedIn links. Never commit.
+private_version.html
+private_*.html
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
